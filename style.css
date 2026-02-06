@@ -1,0 +1,445 @@
+@font-face {
+    font-family: 'fonteVIDEOJOGO';
+    src: url('fonts/PressStart2P-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #EAC2C9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    overflow: hidden;
+}
+
+.titulo-jogo, .subtitulo, .botao-start {
+    font-family: 'fonteVIDEOJOGO', sans-serif;
+}
+
+.titulo-jogo {
+    font-size: 40px;
+    color: #ff0055;
+    text-shadow: 4px 4px #000;
+    margin: 0;
+}
+
+.subtitulo {
+    font-size: 12px;
+    color: #333;
+    animation: piscar 1s infinite;
+}
+
+.botao-start {
+    background-color: #000;
+    color: #EAC2C9;
+    border: 4px solid #ffffff;
+    padding: 20px 40px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.pagina1 {
+    width: 100%;
+}
+
+.titulo {
+    color: #000000;
+    font-size: 36px;
+}
+
+.caixaDeTexto {
+    font-size: 24px;
+    padding: 15px;
+    width: 80%;
+    max-width: 500px;      /* Não fica exageradamente grande em ecrãs gigantes */
+    height: auto;          /* Altura automática baseada no padding e fonte */
+    background-color: #D1FFB2;
+    border: 3px solid #000;
+    border-radius: 10px;   /* Cantos ligeiramente arredondados para ficar melhor */
+    outline: none;         /* Remove aquela borda azul feia do browser */
+    cursor: text;
+}
+
+.caixaDeTexto:focus {
+    border-color: #ff0055; /* Muda de cor quando clicas para saberes que está ativa */
+    box-shadow: 0 0 10px rgba(255, 0, 85, 0.3);
+}
+
+#pagina1 {
+    display: none;
+    width: 100%;
+    z-index: 10; /* Garante que está à frente de tudo */
+}
+
+#pagina2,
+#paginaPergunta,
+#paginaSim,
+#paginaCarta {
+    display: none;
+}
+
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.carregando {
+    color: white;
+    font-family: 'fonteVIDEOJOGO', sans-serif;
+    font-size: 20px;
+    margin-bottom: 40px;
+    animation: piscar 2s infinite;
+}
+
+.coracao-container {
+    width: 250px;
+    height: 240px;
+    background-color: #444;
+    position: relative;
+    overflow: hidden;
+
+    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+.progresso {
+    width: 100%;
+    height: 0%;
+    background-color: #FF0055;
+    position: absolute;
+    bottom: 0;
+    transition: height 3s linear;
+}
+
+@keyframes encherBarra {
+    to { width: 100%; }
+}
+
+button {
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 20px;
+    margin: 10px;
+    cursor: pointer;
+
+    border: none;
+}
+
+.npc-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    position: relative;
+    overflow: visible;
+}
+
+.npc-container, .balao-texto {
+    /* Impede que estes elementos "roubem" o clique se clicares na borda deles */
+    pointer-events: none;
+}
+
+#pagina1, .caixaDeTexto, .botao-start, button {
+    pointer-events: auto;
+}
+
+.ponto-espiritual {
+    width: 35px;
+    height: 35px;
+    background-color: #000;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.animar-voo-p2 {
+    animation: voarParaNPC 8s ease-out forwards;
+}
+
+@keyframes voarParaNPC {
+   0% {
+       transform: translate(-1000px, 1000px) scale(0.5);
+       opacity: 0;
+   }
+   20% {
+       transform: translate(500px, 0px) scale(1.2);
+       opacity: 1;
+   }
+   28% {
+       transform: translate(500px, 0px) scale(1.2);
+   }
+   45% {
+       transform: translate(-500px, 0px) scale(1.2);
+   }
+   53% {
+       transform: translate(-500px, 0px) scale(1.2);
+   }
+   62% {
+       transform: translate(0px, 0px) scale(1.1);
+   }
+   70% {
+       transform: translate(0px, 0px) scale(8);
+       filter: brightness(1.5); /* Fica mais brilhante por estar "perto da luz" */
+   }
+   85% {
+       transform: translate(0px, 0px) scale(8); /* MANTÉM o tamanho (Pausa de impacto) */
+       filter: brightness(1.5);
+   }
+   95% {
+       transform: translate(0px, 0px) scale(1.1);
+   }
+   100% {
+       transform: translate(0px, 0px) scale(1);
+       opacity: 1;
+   }
+}
+
+.flutuar-suave {
+    animation: flutuar 2s ease-in-out infinite;
+}
+
+@keyframes flutuar {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.balao-texto {
+    display: none;
+    opacity: 0;
+    background-color: white;
+    border: 3px solid black;
+    padding: 20px;
+    position: relative;
+    max-width: 400px;
+    min-width: 60px;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
+}
+
+.mostrar-balao {
+    display: block;
+    opacity: 1;
+}
+
+.balao-texto::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+.butaoSim {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.butaoNao {
+    background-color: #EB0101;
+    color: white;
+}
+
+@keyframes piscar {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.moldura-polaroid {
+    background-color: white;
+    padding: 15px 15px 60px 15px; /* Bordas: topo, lados, e fundo maior */
+    display: inline-block; /* Ajusta o tamanho à imagem */
+    border: 1px solid #ddd;
+    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2); /* Sombra para parecer real */
+    transform: rotate(0deg); /* Dá um toque de foto "espalhada" na mesa */
+    transition: transform 0.3s;
+}
+
+.moldura-polaroid:hover {
+    transform: rotate(0deg) scale(1.05); /* Endireita e aumenta ao passar o rato */
+}
+
+.carrossel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 150px;
+}
+
+.moldura-polaroid img {
+    width: 400px; /* Ajusta o tamanho que quiseres */
+    height: 400px;
+    object-fit: cover;
+    display: block;
+}
+
+.seta-esq, .seta-dir {
+    background: none;
+    border: none;
+    font-size: 90px;
+    color: white;
+    cursor: pointer;
+    text-shadow: 2px 2px #000;
+    transition: transform 0.2s;
+}
+
+.seta-esq:hover, .seta-dir:hover {
+    transform: scale(1.2);
+    color: #ff0055;
+}
+
+.butaoCarta {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: #ffffff;
+    border: none;              /* Remove a borda padrão feia */
+    padding: 10px 25px;       /* Espaçamento interno */
+    border-radius: 50px;       /* Bordas arredondadas (estilo pílula) */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    text-transform: uppercase; /* Deixa o texto em caixa alta para um ar mais limpo */
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.butaoCarta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+#paginaCarta {
+  width: 100%;
+  display: none;
+  justify-content: center;
+  align-items: flex-end; /* Alinha o wrapper do envelope na parte de baixo da div */
+  min-height: 100vh; /* Garante que o wrapper da carta ocupa a altura total */
+  padding-bottom: 50px; /* Um pequeno respiro da borda inferior */
+}
+
+/* --- Container principal do envelope --- */
+.envelope-wrapper-grande {
+  position: relative;
+  width: 500px; /* Largura do envelope */
+  height: 300px; /* Altura do envelope fechado */
+  perspective: 1000px; /* Para a animação 3D da aba */
+  margin-bottom: -150px; /* Puxa um pouco para baixo para a base ficar escondida */
+}
+
+.envelope-grande {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #f08080; /* Cor do envelope (rosa salmão) */
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  transform-style: preserve-3d;
+}
+
+/* --- Frente do envelope (triângulo visual) --- */
+.frente-grande {
+  position: absolute;
+  width: 0; height: 0;
+  z-index: 5;
+  border-right: 250px solid transparent; /* Metade da largura */
+  border-left: 250px solid transparent;  /* Metade da largura */
+  border-bottom: 150px solid #F88989; /* Metade da altura, mesma cor do envelope */
+  bottom: 0;
+}
+
+.frente-grande::after {
+  content: '';
+  position: absolute;
+  width: 0; height: 0;
+  border-right: 250px solid #fa8072; /* Tom ligeiramente diferente para efeito 3D */
+  border-left: 250px solid #fa8072;
+  border-top: 150px solid transparent;
+  left: -250px; /* Ajusta a posição para o centro */
+  bottom: -150px; /* Ajusta a posição */
+}
+
+/* --- Aba que abre --- */
+.aba-grande {
+  position: absolute;
+  top: 0;
+  width: 0; height: 0;
+  z-index: 4;
+  border-right: 250px solid transparent;
+  border-left: 250px solid transparent;
+  border-top: 150px solid #F88989;
+  transform-origin: top;
+  transition: transform 0.5s ease-out; /* Animação mais suave e lenta */
+}
+
+/* --- A CARTA --- */
+.carta-grande {
+  position: absolute;
+  bottom: -750px; /* Começa na base do envelope */
+  width: 83.88%; /* Largura da carta menos as margens */
+  height: auto; /* A altura será definida pelo conteúdo */
+  min-height: 400px; /* Altura mínima para mostrar que é grande */
+  max-height: 80vh;
+  background: white;
+  z-index: 2;
+  padding: 40px; /* Mais padding para a carta grande */
+  transition: transform 1.5s ease-out, z-index 0.1s 0.5s; /* Animação mais suave e lenta */
+  overflow-y: auto;
+  font-weight: normal;
+  font-family: 'Dancing Script', cursive; /* Fonte manuscrita */
+  font-size: 1.7em; /* Tamanho da letra maior */
+  line-height: 1.6; /* Espaçamento entre linhas */
+  color: #00000;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+}
+
+.envelope-grande.open .carta-grande {
+  transform: translateY(-850px); /* A carta sobe muito mais para ser visível */
+  /* Este valor (550px) pode precisar de ajustes dependendo do tamanho final da carta */
+}
+
+.envelope-grande.open .aba-grande {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+@font-face {
+    font-family: 'Dancing Script';
+    src: url('fonts/DancingScript-VariableFont_wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
