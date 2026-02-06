@@ -1,0 +1,85 @@
+    <!DOCTYPE html>
+    <html lang="pt">
+
+    <head>
+        <meta charset="UTF-8">
+        <title> Para ti ♥ </title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="images/jpg" href="images/istockphoto-936563406-612x612.jpg">
+        <script src="script.js"></script>
+    </head>
+
+    <body>
+
+    <div id="menuInicial">
+        <h1 class="titulo-jogo">MISSÃO SÃO VALENTIM</h1>
+        <p class="subtitulo">(Clica no "Iniciar Jogo" para iniciar)</p>
+        <button class="botao-start" onclick="iniciarJogo()">Iniciar Jogo</button>
+    </div>
+
+    <div id="loader" style="display: none;">
+        <div class="loader-content">
+            <p class="carregando">A CARREGAR...</p>
+            <div class="coracao-container">
+                <div class="progresso" id="progresso-barra"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pagina1">
+        <h1 class="titulo">Introduz o teu nome:</h1>
+        <input class="caixaDeTexto" type="text" id="nome" placeholder="Escreve aqui"
+               onkeydown="verificarNomeLigia(event)">
+    </div>
+
+    <div id="pagina2">
+        <div class="npc-container">
+            <div class="balao-texto">
+                <p id="mensagem2"></p>
+            </div>
+            <div id = "ponto-p2" class="ponto-espiritual"></div>
+        </div>
+    </div>
+
+    <div id="paginaPergunta">
+        <h1 id="mensagem3">Aceitas-me como teu namorado neste dia de São Valentim?</h1>
+        <div class="butoes">
+            <button class="butaoSim" onclick="clicarButaoSim()">Sim</button>
+            <button class="butaoNao" onclick="clicarButaoNao()">Não</button>
+        </div>
+    </div>
+
+    <div id="paginaSim">
+        <div class="carrossel-container">
+            <button class="seta-esq" onclick="mudarFoto(-1)">&#10094;</button>
+
+            <div class="moldura-polaroid">
+                <img id="fotoPolaroid"src="images/IMG-20250921-WA0030.jpg" alt="Foto1">
+            </div>
+
+            <button class="seta-dir" onclick="mudarFoto(1)">&#10095;</button>
+        </div>
+        <button class="butaoCarta" onclick="clicarButaoCarta()">Avançar</button>
+    </div>
+
+    <div id="paginaCarta">
+        <div class="envelope-wrapper-grande">
+            <div class="envelope-grande">
+                <div class="aba-grande"></div>
+                <div class="frente-grande"></div>
+                <div class="carta-grande">
+                    <h2>Minha Querida Lígia,</h2>
+                    <p>Este é o primeiro parágrafo de um texto muito, muito longo. Aqui poderás escrever tudo o que sentes, todas as memórias que partilham, todos os sonhos para o futuro. A beleza desta carta é que ela pode ter o tamanho que precisares, pois a página irá rolar para acompanhar todo o teu coração.</p>
+                    <p>Lembro-me da primeira vez que te vi, da forma como o teu sorriso iluminou o meu dia. Cada momento desde então tem sido um presente, e cada dia contigo é uma aventura que eu nunca quis que acabasse.</p>
+                    <p>Desde os nossos cafés da manhã juntos, as nossas conversas intermináveis sobre tudo e mais alguma coisa, até aos silêncios confortáveis onde apenas a tua presença me completa. Cada um desses instantes é um tesouro que guardo com muito carinho. O teu apoio incondicional, a tua risada contagiante, a tua forma de ver o mundo, tudo isso me inspira e me faz querer ser uma pessoa melhor.</p>
+                    <p>Sei que a vida nos reserva muitas surpresas e desafios, mas com a tua mão na minha, sinto que podemos enfrentar qualquer coisa. Mal posso esperar por todas as novas memórias que vamos criar, as viagens que vamos fazer, os sonhos que vamos realizar juntos. O futuro é brilhante porque tu fazes parte dele.</p>
+                    <p>Com todo o meu amor e carinho,</p>
+                    <p>O teu Namorado</p>
+                    <p>P.S. Escrevi esta carta para te recordar o quanto és especial para mim, hoje e sempre.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </body>
+    </html>
