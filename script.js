@@ -68,14 +68,20 @@ function verificarNomeLigia (evento) {
 
         if (texto === "ligia"|| texto === "lígia") {
             input.disabled = true;
-            pontoP1.classList.remove("flutuar-suave");
-            void pontoP1.offsetWidth; // Reset para a animação disparar
+            const container = document.querySelector(".container-introducao");
+            container.classList.remove("fade-in");
+            container.classList.add("fade-out");
+
+            void pontoP1.offsetWidth;
             pontoP1.classList.add("animarVOOADEVOLTA");
-                        // 2. Espera a animação acabar (2s) antes de mudar para a conversa
+
             setTimeout(() => {
                 p1.style.display = "none";
                 const p3 = document.getElementById("pagina3");
                 p3.style.display = "block";
+
+                const pontoLigia = document.getElementById("ponto-ligia");
+                pontoLigia.classList.add("flutuar-suave");
                             // Inicia a primeira frase da conversa
                 avancarMensagemLigia();
                             // Ativa o clique para o resto da conversa
@@ -131,10 +137,15 @@ function avancarMensagem () {
         setTimeout(() => {
              document.getElementById("pagina2").style.display = "none";
              const p1 = document.getElementById("pagina1");
+             const container = p1.querySelector(".container-introducao");
+             const pontoP1 = document.getElementById("ponto-p1"); // Pegamos o ponto
              p1.style.display = "flex";
+             // REMOVE a flutuação quando a pergunta aparece
+             pontoP1.classList.remove("flutuar-suave");
              setTimeout(() => {
+                 container.classList.add("fade-in");
                  document.getElementById("nome").focus();
-             }, 100);
+             }, 50);
          }, 2000);
     }
 }
