@@ -12,9 +12,14 @@
     <body>
 
     <div id="menuInicial">
+        <div class="decoracoes">
+            <img src="images/1000046404.png" class="foto-principal">
+            <img src="images/happy-cat-happy-happy-happy.gif" class="gato">
+        </div>
         <h1 class="titulo-jogo">MISSÃO SÃO VALENTIM</h1>
         <p class="subtitulo">(Clica no "Iniciar Jogo" para iniciar)</p>
         <button class="botao-start" onclick="iniciarJogo()">Iniciar Jogo</button>
+        <button class="botao-atalho" onclick="pularParaPesca()">Ir para Pesca (Atalho)</button>
     </div>
 
     <div id="loader" style="display: none;">
@@ -26,10 +31,13 @@
         </div>
     </div>
 
-    <div id="pagina1">
-        <h1 class="titulo">Introduz o teu nome:</h1>
-        <input class="caixaDeTexto" type="text" id="nome" placeholder="Escreve aqui"
-               onkeydown="verificarNomeLigia(event)">
+    <div id="pagina1" style="display: none;">
+        <div class="container-introducao">
+            <h1 class="titulo">Introduz o teu nome:</h1>
+            <input class="caixaDeTexto" type="text" id="nome" placeholder="Escreve aqui"
+                   onkeydown="verificarNomeLigia(event)">
+            <div id="ponto-p1" class="ponto-espiritual flutuar-suave"></div>
+        </div>
     </div>
 
     <div id="pagina2">
@@ -38,6 +46,15 @@
                 <p id="mensagem2"></p>
             </div>
             <div id = "ponto-p2" class="ponto-espiritual"></div>
+        </div>
+    </div>
+
+    <div id="pagina3" style="display: none;">
+        <div class="npc-container flutuar-suave">
+            <div class="balao-texto mostrar-balao">
+                <p id="mensagemLigia"></p>
+            </div>
+            <div id="ponto-ligia" class="ponto-espiritual"></div>
         </div>
     </div>
 
@@ -79,6 +96,35 @@
                 </div>
             </div>
         </div>
+        <button class="butaoCartaP2" onclick="clicarButaoCartaP2()">Avançar</button>
+    </div>
+
+    <div id="paginaVideoJogo" style="display: none;">
+        <div id="score">Corações: 0</div>
+        <div id="player" style="position: fixed; bottom: 20px; z-index: 10000; pointer-events: none; display: flex; align-items: flex-end;">
+            <div class="ponto-espiritual" style="width: 30px; height: 30px; margin-bottom: 20px;"></div>
+            <img src="images/1000046424.png" id="imagemBalde" style="width: 80px; height: auto; margin-left: -15px;">
+        </div>
+        <p class="instrucoes">(Usa o rato para apanhar os corações!)</p>
+    </div>
+
+    <div id="paginaVideoJogo2" class="container-pesca">
+        <div id="barco-container" class="barco-wrapper">
+            <div class="ponto-espiritual personagem-pescador"></div>
+            <img src="images/1000046433.png" id="barco-imagem" alt="Barco">
+
+            <div id="linha" class="linha-pesca">
+                <div id="anzol" class="anzol-pesca">🪝</div>
+            </div>
+        </div>
+
+        <div id="areia" class="zona-areia">
+            <div id="tesouro" class="recompensa-final">🎁</div>
+        </div>
+    </div>
+
+    <div id = "paginaVideoJogoDanca">
+
     </div>
 
     </body>
