@@ -6,10 +6,13 @@
         <title> Para ti ♥ </title>
         <link rel="stylesheet" href="style.css">
         <link rel="icon" type="images/jpg" href="images/istockphoto-936563406-612x612.jpg">
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
         <script src="script.js"></script>
     </head>
 
     <body>
+
+    <div id="pixel-transition"></div>
 
     <div id="menuInicial">
         <div class="decoracoes">
@@ -18,8 +21,8 @@
         </div>
         <h1 class="titulo-jogo">MISSÃO SÃO VALENTIM</h1>
         <p class="subtitulo">(Clica no "Iniciar Jogo" para iniciar)</p>
-        <button class="botao-start" onclick="iniciarJogo()">Iniciar Jogo</button>
-        <button class="botao-atalho" onclick="pularParaPesca()">Ir para Pesca (Atalho)</button>
+        <button class="botao-start" onclick="iniciarJogo()">Iniciar História</button>
+        <button class="btn-minijogos" onclick="irParaMenuJogos()">Minijogos 🎮</button>
     </div>
 
     <div id="loader" style="display: none;">
@@ -35,8 +38,8 @@
         <div id="ponto-p1" class="ponto-espiritual flutuar-suave"></div>
         <div class="container-introducao">
             <h1 class="titulo">Introduz o teu nome:</h1>
-            <input class="caixaDeTexto" type="text" id="nome" placeholder="Escreve aqui"
-                   onkeydown="verificarNomeLigia(event)">
+            <label for="nome"></label><input class="caixaDeTexto" type="text" id="nome" placeholder="Escreve aqui"
+                                             onkeydown="verificarNomeLigia(event)">
         </div>
     </div>
 
@@ -51,7 +54,7 @@
 
     <div id="pagina3" style="display: none;">
         <div class="npc-container flutuar-suave">
-            <div class="balao-texto mostrar-balao">
+            <div id="balaoLigia" class="balao-texto">
                 <p id="mensagemLigia"></p>
             </div>
             <div id="ponto-ligia" class="ponto-espiritual"></div>
@@ -70,11 +73,28 @@
         <div class="carrossel-container">
             <button class="seta-esq" onclick="mudarFoto(-1)">&#10094;</button>
 
-            <div class="moldura-polaroid">
-                <img id="fotoPolaroid" src="images/IMG-20250921-WA0030.jpg" alt="Foto1">
+            <div class="wrapper-fotos">
+                <div class="moldura-polaroid foto-lateral" id="foto-esq">
+                    <img src="" alt="Esquerda">
+                </div>
+
+                <div class="moldura-polaroid foto-foco" id="foto-meio">
+                    <img src="" alt="Meio">
+                </div>
+
+                <div class="moldura-polaroid foto-lateral" id="foto-dir">
+                    <img src="" alt="Direita">
+                </div>
             </div>
 
             <button class="seta-dir" onclick="mudarFoto(1)">&#10095;</button>
+
+            <div class="npc-comentario">
+                <div id="balao-comentario-id" class="balao-comentario">
+                    <p id="texto-comentario"></p>
+                </div>
+                <div class="ponto-espiritual"></div>
+            </div>
         </div>
         <button class="butaoCarta" onclick="clicarButaoCarta()">Avançar</button>
     </div>
@@ -99,13 +119,42 @@
         <button class="butaoCartaP2" onclick="clicarButaoCartaP2()">Avançar</button>
     </div>
 
+    <div id="paginaMenuJogos" class="secao-jogos" style="display: none;">
+        <h1 class="titulo-menu">Recupera os teus Presentes! 🎁</h1>
+
+        <div class="container-botoes-jogos">
+            <button class="btn-presente" onclick="irParaJogo(1)">
+                <span class="emoji-presente">🎁</span>
+                <div class="info-presente">
+                    <strong>Presente #1</strong>
+                    <p>Vence o desafio para desbloquear!</p>
+                </div>
+            </button>
+
+            <button class="btn-presente" onclick="irParaJogo(2)">
+                <span class="emoji-presente">🎁</span>
+                <div class="info-presente">
+                    <strong>Presente #2</strong>
+                    <p>O que será que está aqui dentro?</p>
+                </div>
+            </button>
+
+            <button class="btn-presente" onclick="irParaJogo(3)">
+                <span class="emoji-presente">🎁</span>
+                <div class="info-presente">
+                    <strong>Presente #3</strong>
+                    <p>Um último esforço, Lígia!</p>
+                </div>
+            </button>
+        </div>
+    </div>
+
     <div id="paginaVideoJogo" style="display: none;">
         <div id="score">Corações: 0</div>
         <div id="player" style="position: fixed; bottom: 20px; z-index: 10000; pointer-events: none; display: flex; align-items: flex-end;">
             <div class="ponto-espiritual" style="width: 30px; height: 30px; margin-bottom: 20px;"></div>
             <img src="images/1000046424.png" id="imagemBalde" style="width: 80px; height: auto; margin-left: -15px;" alt="balde">
         </div>
-        <p class="instrucoes">(Usa o rato para apanhar os corações!)</p>
     </div>
 
     <div id="paginaVideoJogo2" class="container-pesca">
@@ -123,8 +172,21 @@
         </div>
     </div>
 
-    <div id = "paginaVideoJogoDanca">
+    <div id="paginaLoveClicker" style="display: none;">
+        <h1 class="titulo-jogo">LOVE CLICKER</h1>
+        <p class="subtitulo">Clica no coração para libertar o amor!</p>
 
+        <div class="stats-game" style="font-family: 'fonteVIDEOJOGO', sans-serif; margin: 20px;">
+            TEMPO: <span id="timer">10</span>s | CLIQUES: <span id="score-clicker">0</span>
+        </div>
+
+        <div id="heart-btn">❤️</div>
+
+        <div id="message-clicker" class="pixel-message" style="font-family: 'fonteVIDEOJOGO', sans-serif; color: #ff0055;"></div>
+
+        <button id="start-clicker-btn" class="botao-start" onclick="iniciarContagemClicker()">
+            Iniciar Jogo
+        </button>
     </div>
 
     </body>

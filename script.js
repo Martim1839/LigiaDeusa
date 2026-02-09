@@ -1,35 +1,58 @@
 
 function iniciarJogo() {
-    // Esconde o menu com uma transição simples
+    const transitionContainer = document.getElementById("pixel-transition");
     const menu = document.getElementById("menuInicial");
-    const loader = document.getElementById("loader")
-    const barra = document.getElementById("progresso-barra")
-    const p1 = document.getElementById("pagina1");
+    const loader = document.getElementById("loader");
+    const barra = document.getElementById("progresso-barra"); // Garante que este ID existe no HTML
     const p2 = document.getElementById("pagina2");
 
-    menu.classList.add("fade-out");
+    // --- TRANSIÇÃO 1: MENU PARA LOADER ---
+    transitionContainer.innerHTML = '';
+    const colunas = 10;
+    const linhas = Math.ceil(window.innerHeight / (window.innerWidth / colunas));
+    const totalBlocks = colunas * linhas;
+
+    for (let i = 0; i < totalBlocks; i++) {
+        const block = document.createElement("div");
+        block.className = "pixel-block";
+        block.style.width = `10vw`;
+        block.style.height = `10vw`;
+        transitionContainer.appendChild(block);
+    }
+
+    const blocks = document.querySelectorAll(".pixel-block");
+
+    // Pixels aparecem (Tapa o Menu)
+    blocks.forEach((block) => {
+        setTimeout(() => { block.style.opacity = "1"; }, Math.random() * 600);
+    });
 
     setTimeout(() => {
         menu.style.display = "none";
         loader.style.display = "flex";
-        setTimeout(() => {
-            loader.style.opacity = "1";
-        }, 50);
+        loader.style.opacity = "1";
 
-        barra.style.height  = "0%";
+        // Pixels desaparecem (Revela o Loader)
+        blocks.forEach((block) => {
+           setTimeout(() => { block.style.opacity = "0"; }, Math.random() * 600 + 200);
+        });
 
-        setTimeout(() => {
-            barra.style.height = "100%";
-        }, 50);
+        // Inicia a barra de progresso
+        setTimeout(() => { if(barra) barra.style.height = "100%"; }, 100);
 
+        // --- TRANSIÇÃO 2: LOADER PARA PÁGINA 2 ---
         setTimeout(() => {
-            loader.style.opacity = "0";
-            setTimeout(() => {
+            // Recriar/Resetar pixels para tapar o loader
+            newBlocksAnimation(transitionContainer, colunas, totalBlocks, () => {
+                // Esta função corre quando o ecrã está todo preto:
                 loader.style.display = "none";
                 p2.style.display = "block";
+
                 const pontoP2 = p2.querySelector(".ponto-espiritual");
                 const caixaTexto = p2.querySelector(".balao-texto");
                 pontoP2.classList.add("animar-voo-p2");
+
+                // Final: Ponto voa e as mensagens começam
                 setTimeout(() => {
                     pontoP2.classList.remove("animar-voo-p2");
                     pontoP2.classList.add("flutuar-suave");
@@ -39,10 +62,35 @@ function iniciarJogo() {
                     setTimeout(() => {
                         window.addEventListener("click", avancarMensagem);
                     }, 100);
+
+                    // LIMPEZA FINAL: Remove os quadrados para não estorvar
+                    transitionContainer.innerHTML = '';
                 }, 8000);
-            }, 1000);
-        }, 5000);
-    }, 1000);
+            });
+        }, 5000); // Tempo do Loader
+    }, 800);
+}
+
+// Função auxiliar para evitar repetir código de criação de blocos
+function newBlocksAnimation(container, colunas, total, callbackMid) {
+    container.innerHTML = '';
+    for (let i = 0; i < total; i++) {
+        const block = document.createElement("div");
+        block.className = "pixel-block";
+        block.style.width = `10vw`; block.style.height = `10vw`;
+        container.appendChild(block);
+    }
+    const blocks = container.querySelectorAll(".pixel-block");
+
+    // Aparecem
+    blocks.forEach(b => setTimeout(() => b.style.opacity = "1", Math.random() * 400));
+
+    // Troca o conteúdo a meio
+    setTimeout(() => {
+        callbackMid();
+        // Desaparecem
+        blocks.forEach(b => setTimeout(() => b.style.opacity = "0", Math.random() * 400 + 200));
+    }, 600);
 }
 
 const mensagens = [
@@ -181,9 +229,59 @@ function avancarMensagemLigia() {
             }
         }, 50);
     } else {
-        window.removeEventListener("click", avancarMensagemLigia);
-        document.getElementById("pagina3").style.display = "none";
-        document.getElementById("paginaPergunta").style.display = "block";
+            window.removeEventListener("click", avancarMensagemLigia);
+
+            const pontoLigia = document.getElementById("ponto-ligia");
+            const balaoLugia = document.getElementById("balaoLigia");
+
+            // 1. Esconde o balão da P3 imediatamente antes de o ponto sair
+            if(balaoLugia) balaoLugia.style.display = "none";
+
+            // 2. O ponto faz a animação de saída
+            pontoLigia.classList.remove("flutuar-suave");
+            void pontoLigia.offsetWidth;
+            pontoLigia.classList.add("animar-saida-ponto");
+
+            // --- ESTE É O SETTIMEOUT ONDE DEVES COLOCAR O CÓDIGO ---
+            setTimeout(() => {
+                // Esconde a página antiga e mostra a nova
+                document.getElementById("pagina3").style.display = "none";
+                const pagSim = document.getElementById("paginaSim");
+                pagSim.style.display = "block";
+
+                // AQUI: Forçar as fotos a aparecerem mal a página Sim abre
+                atualizarVisualCarrossel();
+
+                // Preparar o ponto novo para a animação de entrada
+                const pontoNovo = pagSim.querySelector(".ponto-espiritual");
+                const balaoFotos = document.getElementById("balao-comentario-id");
+
+                if (balaoFotos) {
+                    balaoFotos.style.display = "none";
+                    balaoFotos.style.opacity = "0";
+                }
+
+                // Reset técnico para o browser reconhecer a nova animação
+                pontoNovo.classList.remove("animar-chegada-ponto", "flutuar-suave");
+                void pontoNovo.offsetWidth;
+
+                // Iniciar animação de entrada do ponto nas fotos
+                pontoNovo.classList.add("animar-chegada-ponto");
+
+                // Esperar o ponto chegar (3s) para mostrar o balão de comentário
+                setTimeout(() => {
+                    pontoNovo.classList.remove("animar-chegada-ponto");
+                    pontoNovo.classList.add("flutuar-suave");
+
+                    if (balaoFotos) {
+                        balaoFotos.style.display = "block";
+                        setTimeout(() => {
+                            balaoFotos.style.opacity = "1";
+                            atualizarComentario(); // Escreve o texto da foto
+                        }, 50);
+                    }
+                }, 3000);
+            }, 2000); // Tempo que o ponto demora a sair da P3
     }
 }
 
@@ -223,30 +321,57 @@ function clicarButaoNao() {
 function clicarButaoSim() {
     document.getElementById("paginaPergunta").style.display = "none";
     document.getElementById("paginaSim").style.display = "block";
+    dispararConfetis();
+    atualizarVisualCarrossel();
+}
+
+function dispararConfetis() {
+    // Configuração de um disparo lateral (estilo canhão)
+    var duration = 5 * 1000;
+    var animationEnd = Date.now() + duration;
+    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+    function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    var interval = setInterval(function() {
+        var timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+            return clearInterval(interval);
+        }
+
+        var particleCount = 50 * (timeLeft / duration);
+        // Dispara de dois pontos diferentes
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+    }, 250);
 }
 
 const listaFotos = [
-    "images/IMG-20250921-WA0030.jpg",
-    "images/IMG-20251005-WA0006.jpg",
-    "images/IMG-20251101-WA0008.jpg",
-    "images/IMG_20251010_235107_172.jpg",
-    "images/IMG_20260105_231718_265.jpg",
-    "images/IMG_20251107_200129_414.jpg",
-    "images/IMG-20250921-WA0005.jpg",
-    "images/20251229_200000.jpg",
-    "images/2ad72b06735cbc74a7f1015697b57127.jpg",
-    "images/asdasd.jpg",
-    "images/20251211_161246.jpg"
+    "images/IMG-20250921-WA0030.jpg", "images/IMG-20251005-WA0006.jpg",
+    "images/IMG-20251101-WA0008.jpg", "images/IMG_20251010_235107_172.jpg",
+    "images/IMG_20260105_231718_265.jpg", "images/IMG_20251107_200129_414.jpg",
+    "images/IMG-20250921-WA0005.jpg", "images/20251229_200000.jpg",
+    "images/2ad72b06735cbc74a7f1015697b57127.jpg", "images/asdasd.jpg",
+    "images/20251211_161246.jpg", "images/IMG-20250921-WA0004.jpg",
+    "images/IMG-20250921-WA0028.jpg", "images/IMG-20251005-WA0008.jpg", "images/IMG-20251101-WA0029.jpg",
+    "images/IMG-20251109-WA0018.jpg", "images/IMG-20251101-WA0031.jpg",
+    "images/IMG_20251109_193223_611.jpg", "images/IMG_20260115_214513_204.jpg"
+];
+
+const comentariosFotos = [
+    "Aqui estavas radiante! 😍",           // Foto 0
+    "Este dia foi inesquecível...",       // Foto 1
+    "Olha só esse sorriso! ✨",            // Foto 2
+    "O meu dono adora esta foto.",        // Foto 3
+    "Ficam tão bem juntos! ♥",            // Foto 4
 ];
 
 let fotoAtual = 0;
 
 function mudarFoto(direcao) {
-    const imgElemento = document.getElementById("fotoPolaroid");
-    if (!imgElemento) {
-        console.error("Não encontrei a imagem seu burro");
-        return;
-    }
     fotoAtual += direcao;
 
     if (fotoAtual >= listaFotos.length) {
@@ -255,8 +380,56 @@ function mudarFoto(direcao) {
     if (fotoAtual < 0) {
         fotoAtual = listaFotos.length - 1;
     }
+    atualizarVisualCarrossel();
+    atualizarComentario();
+}
 
-    imgElemento.src = listaFotos[fotoAtual];
+function atualizarVisualCarrossel() {
+    const imgMeio = document.querySelector("#foto-meio img");
+    const imgEsq = document.querySelector("#foto-esq img");
+    const imgDir = document.querySelector("#foto-dir img");
+
+    // Verificação de segurança: se as imagens não existirem no DOM, para aqui
+    if (!imgMeio || !imgEsq || !imgDir) return;
+
+    // Calcular índices vizinhos
+    let indiceEsq = fotoAtual - 1;
+    if (indiceEsq < 0) indiceEsq = listaFotos.length - 1;
+
+    let indiceDir = fotoAtual + 1;
+    if (indiceDir >= listaFotos.length) indiceDir = 0;
+
+    // Aplicar os caminhos das imagens
+    imgMeio.src = listaFotos[fotoAtual];
+    imgEsq.src = listaFotos[indiceEsq];
+    imgDir.src = listaFotos[indiceDir];
+
+    // Log para debugging (podes ver na consola F12 se o caminho está certo)
+    console.log("A carregar foto atual:", listaFotos[fotoAtual]);
+}
+
+let intervaloComentario = null;
+
+function atualizarComentario() {
+    const elementoTexto = document.getElementById("texto-comentario");
+    const textoCompleto = comentariosFotos[fotoAtual] || "Que memória incrível! ♥";
+
+    if (intervaloComentario) {
+        clearInterval(intervaloComentario);
+    }
+
+    elementoTexto.textContent = "";
+    let i = 0;
+
+    intervaloComentario = setInterval(() => {
+        elementoTexto.textContent += textoCompleto[i];
+        i++;
+
+        if (i >= textoCompleto.length) {
+            clearInterval(intervaloComentario);
+            intervaloComentario = null;
+        }
+    }, 40);
 }
 
 function clicarButaoCarta() {
@@ -280,12 +453,55 @@ function clicarButaoCartaP2() {
     // Mostra a página
     paginaVideoJogo.style.display = "flex";
     paginaVideoJogo.style.flexDirection = "column"; // Garante que o score e o player alinham bem
-    // LIGA O JOGO AQUI!
     iniciarMinijogo();
 }
 
 let score = 0;
 let jogoAtivo = false;
+
+function irParaMenuJogos() {
+    const menu = document.getElementById("menuInicial");
+    const paginaJogos = document.getElementById("paginaMenuJogos");
+
+    // Esconde o menu inicial
+    if (menu) menu.style.display = "none";
+
+    // Mostra a página dos botões de jogos
+    if (paginaJogos) {
+        paginaJogos.style.display = "flex";
+        // Garante que o scroll volta ao topo
+        window.scrollTo(0, 0);
+    }
+}
+
+function irParaJogo(numero) {
+    document.getElementById("paginaMenuJogos").style.display = "none";
+
+    if (numero === 1) {
+        document.getElementById("paginaVideoJogo").style.display = "flex";
+        iniciarMinijogo(); // Teu jogo dos corações
+    } else if (numero === 2) {
+        iniciarJogoPesca(); // Teu jogo da pesca
+    } else if (numero === 3) {
+        document.getElementById('paginaLoveClicker').style.display = "flex";
+        configurarCliquesCoracao();
+    }
+}
+
+function ganharJogo(numero) {
+    // Esta função deve ser chamada quando o score atingir o limite ou o tempo acabar
+
+    let presenteOriginal = "";
+    if(numero === 1) presenteOriginal = "um Jantar Romântico! 🍝";
+    if(numero === 2) presenteOriginal = "aquela Camisola que querias! 👕";
+    if(numero === 3) presenteOriginal = "uma Viagem surpresa! ✈️";
+
+    // Efeito de vitória
+    alert("PARABÉNS! ✨\nDesbloqueaste o Presente #" + numero + ":\n" + presenteOriginal);
+
+    // Volta ao menu para ela escolher o próximo
+    irParaMenuJogos();
+}
 
 function iniciarMinijogo() {
     const player = document.getElementById('player');
@@ -333,18 +549,19 @@ function criarCoracao(player, scoreElement) {
         const baldeRect = document.getElementById('imagemBalde').getBoundingClientRect(); // Focamos no balde
         const cRect = coracao.getBoundingClientRect();
 
+        const margemErro = 15;
         if (
             cRect.bottom >= baldeRect.top &&
-            cRect.right >= baldeRect.left &&
-            cRect.left <= baldeRect.right &&
-            cRect.top <= baldeRect.bottom
+            cRect.right >= baldeRect.left + 30 &&
+            cRect.left <= baldeRect.right + 10 &&
+            cRect.top <= baldeRect.bottom - 10
         ) {
             score++;
             scoreElement.innerHTML = `Corações: ${score}`;
             coracao.remove();
             clearInterval(queda);
 
-            if (score === 15) {
+            if (score === 20) {
                 jogoAtivo = false;
                 finalizarJogo();
             }
@@ -458,25 +675,28 @@ function lancarAnzol() {
         });
 
         // 2. Colisão com Tesouro
-        if (detectarColisao(anzolRect, tesouro.getBoundingClientRect())) {
+        if (tesouro && detectarColisao(anzolRect, tesouro.getBoundingClientRect())) {
             clearInterval(loopColisao);
             presenteCapturado = true;
 
             tesouro.style.transition = "none";
 
-            // Criamos um novo loop para o presente seguir o anzol na subida
+            // Loop para o presente subir "colado" ao anzol
             const subirComTesouro = setInterval(() => {
                 const novoAnzolRect = anzol.getBoundingClientRect();
                 const linhaAltura = parseFloat(window.getComputedStyle(linha).height);
 
-                // O presente segue a posição do anzol
+                // Faz o presente seguir o anzol
                 tesouro.style.top = (novoAnzolRect.top) + "px";
                 tesouro.style.left = (novoAnzolRect.left) + "px";
 
+                // Quando a linha chega quase ao topo (5px)
                 if (linhaAltura <= 5) {
                     clearInterval(subirComTesouro);
-                    tesouro.style.display = "none";
-                    irParaPaginaDanca();
+                    tesouro.style.display = "none"; // Remove o tesouro do mar
+
+                    // IMPORTANTE: Adicionados os parênteses para executar a função!
+                    ganharJogoPesca();
                 }
             }, 10);
 
@@ -484,9 +704,12 @@ function lancarAnzol() {
         }
     }, 20);
 
+    // Timeout de segurança caso não pesque nada
     setTimeout(() => {
-        if (pescando) resetarCana(loopColisao);
-    }, 1000);
+        if (pescando && !presenteCapturado) {
+            resetarCana(loopColisao);
+        }
+    }, 1200); // Um pouco mais que o tempo da transição CSS
 }
 
 function resetarCana(intervalo) {
@@ -536,8 +759,110 @@ function pularParaPesca() {
     iniciarJogoPesca();
 }
 
-function irParaPaginaDanca() {
-    document.getElementById("paginaVideoJogo2").style.display = "none";
-    const paginaDanca = document.getElementById("paginaVideoJogoDanca");
-    paginaDanca.style.display = "flex";
+function ganharJogoPesca() {
+    const containerPesca = document.querySelector('.container-pesca');
+    containerPesca.style.transition = "opacity 1s";
+    containerPesca.style.opacity = "0";
+
+    setTimeout(() => {
+        containerPesca.style.display = "none";
+
+        const clicker = document.getElementById('paginaLoveClicker');
+        clicker.style.display = "flex";
+        clicker.style.opacity = "0";
+
+        // --- ATIVA OS CLIQUES AQUI ---
+        configurarCliquesCoracao();
+
+        setTimeout(() => {
+            clicker.style.transition = "opacity 1s";
+            clicker.style.opacity = "1";
+        }, 50);
+    }, 1000);
 }
+
+// --- 1. VARIÁVEIS DE CONTROLO ---
+let clickScore = 0;
+let clickTimeLeft = 10;
+let clickGameActive = false;
+let clickTimerId;
+
+// --- 2. NOVA FUNÇÃO PARA CONFIGURAR OS CLIQUES ---
+// Chamamos isto apenas uma vez para garantir que o contador funciona
+function configurarCliquesCoracao() {
+    const clickHeartBtn = document.getElementById('heart-btn');
+    const clickScoreEl = document.getElementById('score-clicker');
+
+    if (clickHeartBtn && !clickHeartBtn.dataset.configurado) {
+
+        clickHeartBtn.addEventListener('pointerdown', (e) => {
+            if (!clickGameActive) return;
+
+            // Bloqueia TUDO o que o browser queira fazer (menu, seleção, etc)
+            e.preventDefault();
+            e.stopPropagation();
+
+            clickScore++;
+            clickScoreEl.innerText = clickScore;
+
+            // Efeito visual
+            const heart = document.createElement('span');
+            heart.innerText = '💖';
+            heart.className = 'floating-heart';
+            heart.style.left = e.pageX + 'px';
+            heart.style.top = e.pageY + 'px';
+            heart.style.position = 'absolute';
+            heart.style.zIndex = '10000';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 800);
+        });
+
+        clickHeartBtn.dataset.configurado = "true";
+    }
+}
+
+function iniciarContagemClicker() {
+    clickScore = 0;
+    clickTimeLeft = 10;
+    clickGameActive = true;
+
+    document.getElementById('score-clicker').innerText = "0";
+    document.getElementById('timer').innerText = "10";
+    document.getElementById('message-clicker').innerText = "DÁ-LHE!";
+    document.getElementById('start-clicker-btn').style.visibility = 'hidden';
+
+    clearInterval(clickTimerId);
+    clickTimerId = setInterval(() => {
+        clickTimeLeft--;
+        document.getElementById('timer').innerText = clickTimeLeft;
+        if (clickTimeLeft <= 0) endClickGame();
+    }, 1000);
+}
+
+// Atualiza a função de fim de jogo para mostrar o botão novamente
+function endClickGame() {
+    clearInterval(clickTimerId);
+    clickGameActive = false;
+
+    const clickStartBtn = document.getElementById('start-clicker-btn');
+    const clickMessageEl = document.getElementById('message-clicker');
+
+    if(clickStartBtn) {
+        clickStartBtn.style.visibility = 'visible';
+        clickStartBtn.innerText = "Tentar de novo?";
+    }
+
+    if (clickMessageEl) {
+        if (clickScore > 50) {
+            clickMessageEl.innerText = `INCRÍVEL! ${clickScore} cliques! ❤️`;
+        } else {
+            clickMessageEl.innerText = `Fim! Fizeste ${clickScore} cliques!`;
+        }
+    }
+}
+
+// Bloqueio Global do Menu de Contexto (Botão Direito) em toda a página
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// Bloqueio extra para garantir que cliques do meio/direito não ativem nada nativo
+document.addEventListener('auxclick', event => event.preventDefault());

@@ -16,6 +16,16 @@ body {
     overflow: hidden;
 }
 
+canvas {
+    z-index: 10000 !important;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Garante que os confetis não bloqueiam cliques nas fotos */
+}
+
 #menuInicial {
     position: relative; /* Importante para o posicionamento absoluto da imagem */
     width: 100vw;
@@ -297,6 +307,8 @@ button {
     background-color: #000;
     border-radius: 50%;
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    position: relative; /* Ou absolute dependendo do container pai */
+    transition: opacity 0.5s;
 }
 
 .animar-voo-p2 {
@@ -364,8 +376,8 @@ button {
 }
 
 .mostrar-balao {
-    display: block;
-    opacity: 1;
+    display: block !important;
+    opacity: 1 !important;
 }
 
 .balao-texto::after {
@@ -395,14 +407,49 @@ button {
     100% { opacity: 1; }
 }
 
+.animar-saida-ponto {
+    animation: voarParaBaixo 2s forwards ease-in !important;
+}
+
+@keyframes voarParaBaixo {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(-300px, 600px) scale(0.5); opacity: 0; }
+}
+
+/* Animação de Entrada na Página de Fotos */
+.animar-chegada-ponto {
+    animation: entrarPeloCanto 2s forwards ease-out;
+}
+
+@keyframes entrarPeloCanto {
+    0% {
+        transform: translate(-500px, 500px); /* Vem de longe */
+        opacity: 0;
+    }
+    20% {
+        opacity: 1; /* Aparece logo no início do voo */
+    }
+    100% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+}
+
+/* Garante que o ponto novo não aparece antes da animação */
+#paginaSim .ponto-espiritual:not(.animar-chegada-ponto):not(.flutuar-suave) {
+    opacity: 0;
+}
+
 .moldura-polaroid {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.6s ease,
+                filter 0.6s ease;
+    position: absolute; /* Importante para o movimento suave */
     background-color: white;
-    padding: 15px 15px 60px 15px; /* Bordas: topo, lados, e fundo maior */
-    display: inline-block; /* Ajusta o tamanho à imagem */
+    padding: 20px 20px 60px 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
     border: 1px solid #ddd;
-    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2); /* Sombra para parecer real */
-    transform: rotate(0deg); /* Dá um toque de foto "espalhada" na mesa */
-    transition: transform 0.3s;
+    backface-visibility: hidden; /* Melhora a performance da animação */
 }
 
 .moldura-polaroid:hover {
@@ -413,7 +460,9 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 150px;
+    width: 100vw;
+    position: relative;
+    gap: 600px;
 }
 
 .moldura-polaroid img {
@@ -431,11 +480,57 @@ button {
     cursor: pointer;
     text-shadow: 2px 2px #000;
     transition: transform 0.2s;
+    z-index: 100;
+    position: relative;
 }
 
 .seta-esq:hover, .seta-dir:hover {
     transform: scale(1.2);
     color: #ff0055;
+}
+
+.wrapper-fotos {
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    perspective: 1500px;
+    height: 600px;
+    width: 100%;
+}
+
+.foto-foco {
+    z-index: 10;
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.foto-lateral {
+    z-index: 5;
+    transform: scale(0.8) rotateY(20deg); /* Inclinação para dar profundidade */
+    opacity: 0.6;
+    filter: blur(1px);
+}
+
+#foto-esq {
+    position: absolute;
+    transform: scale(0.7) rotateY(30deg) translateX(-450px); /* Afastamento controlado */
+    opacity: 0.6;
+    z-index: 5;
+}
+
+#foto-meio {
+    position: relative;
+    z-index: 10;
+    transform: scale(1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+#foto-dir {
+    position: absolute;
+    transform: scale(0.7) rotateY(-30deg) translateX(450px); /* Afastamento controlado */
+    opacity: 0.6;
+    z-index: 5;
 }
 
 .butaoCarta {
@@ -580,6 +675,79 @@ button {
     font-style: normal;
 }
 
+.secao-jogos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;      /* Centra horizontalmente */
+    justify-content: center;     /* Centra verticalmente */
+    min-height: 100vh;        /* Garante que ocupa a altura total do navegador */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.titulo-menu {
+    margin-top: 85px; /* Ajusta este valor para empurrar tudo para baixo */
+    margin-bottom: 50px; /* Espaço entre o título e os presentes */
+    font-family: 'fonteVIDEOJOGO', sans-serif;
+    color: white;
+    text-shadow: 3px 3px 0px #000;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.container-botoes-jogos {
+    display: flex;
+    flex-direction: column;
+    gap: 5x;
+    width: 100%;
+    max-width: 400px;
+}
+
+.btn-presente {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 3px solid #000;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 50px;
+    width: 100%;
+}
+
+.btn-presente:hover {
+    transform: scale(1.05) rotate(2deg);
+    background: #ffe6f0; /* Um rosa bem clarinho */
+    box-shadow: 10px 10px 0px #000;
+}
+
+.emoji-presente {
+    font-size: 45px;
+    margin-right: 20px;
+    filter: drop-shadow(2px 2px 0px #000);
+}
+
+.info-presente strong {
+    font-family: 'fonteVIDEOJOGO', sans-serif;
+    font-size: 20px;
+    color: #ff4d6d; /* Cor de destaque */
+}
+
+.btn-minijogos {
+    background-color: #fff;
+    border: 3px solid #000;
+    padding: 10px 20px;
+    font-family: 'fonteVIDEOJOGO', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+}
+
+.btn-minijogos:hover {
+    background-color: #f1c2d3; /* Fica rosa ao passar o rato */
+    transform: scale(1.05);
+    box-shadow: 4px 4px 0px #000;
+}
+
 #player {
     transition: left 0.1s ease-out;
     will-change: left;
@@ -587,7 +755,7 @@ button {
 
 #paginaVideoJogo {
     /* Imagem principal de fundo */
-    background-image: url('images/vecteezy_blank-background-watercolor-with-floral-abstract-wet-hand_20548890.jpg');
+    background-image: url('images/pngtree-pastel-pink-textured-background-with-abstract-watercolor-painting-image_13721736.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -626,12 +794,6 @@ button {
     font-size: 30px;
     z-index: 999;
     user-select: none;
-}
-
-.instrucoes {
-    text-align: center;
-    color: #ff4d6d;
-    margin-top: 10px;
 }
 
 #imagemBalde {
@@ -776,4 +938,161 @@ button {
 
 .fade-out {
     opacity: 0 !important;
+}
+
+#pixel-transition {
+    position: fixed; /* Fixado no ecrã, não no body */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    z-index: 100000; /* Acima de TUDO */
+    pointer-events: none;
+}
+
+.pixel-block {
+    background-color: black;
+    width: 100%;
+    height: 100%; /* O JS vai calcular a altura ou podes usar 10vh */
+    opacity: 0;
+    transition: opacity 0.1s ease;
+}
+
+#paginaLoveClicker {
+    display: flex;
+    flex-direction: column; /* Força os elementos a ficarem um por baixo do outro */
+    align-items: center;    /* Centraliza horizontalmente */
+    justify-content: center; /* Centraliza verticalmente */
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #EAC2C9; /* Garante que o fundo cobre tudo */
+    z-index: 2500;
+}
+
+#paginaLoveClicker .titulo-jogo {
+    margin-bottom: 10px;
+}
+
+#paginaLoveClicker .stats-game {
+    margin: 20px 0;
+    font-family: 'fonteVIDEOJOGO', sans-serif;
+    font-size: 14px;
+}
+
+#heart-btn {
+    font-size: 100px;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: transform 0.1s;
+
+    /* REMOVE O CONTORNO AZUL E A SELEÇÃO */
+    outline: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Garante que imagens dentro do botão também não sejam arrastáveis */
+#heart-btn img {
+    pointer-events: none;
+    user-select: none;
+}
+
+#heart-btn:active {
+    transform: scale(1.2);
+}
+
+/* Estilo das estatísticas e mensagens para combinar com o teu site */
+.stats-pixel, .pixel-subtitle {
+    font-family: 'Courier New', Courier, monospace; /* Ou a tua fonte pixel */
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.pixel-message {
+    font-family: 'fonteVIDEOJOGO', sans-serif;
+    margin: 15px 0;
+    min-height: 20px;
+}
+
+/* Botão estilo o teu "Iniciar Jogo" da imagem */
+.pixel-button {
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 10px 30px;
+    font-size: 1.2rem;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #000;
+}
+
+.pixel-button:active {
+    box-shadow: 0px 0px 0px #000;
+    transform: translate(2px, 2px);
+}
+
+.pixel-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+/* Corações que voam quando clicas */
+.floating-heart {
+    position: absolute;
+    pointer-events: none;
+    animation: floatUp 0.8s ease-out forwards;
+    font-size: 24px;
+    z-index: 100;
+}
+
+@keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-120px) scale(1.5); }
+}
+
+.npc-comentario {
+    position: fixed;
+    bottom: 90px;
+    left: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 1100; /* Acima das fotos */
+}
+
+.balao-comentario {
+    display: none; /* Começa escondido */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    background: white;
+    border: 3px solid black;
+    padding: 10px 15px;
+    margin-left: 35px; /* Desvio para a direita */
+    margin-bottom: 8px; /* Espaço para a cauda */
+    position: relative;
+    font-size: 20px;
+}
+
+/* Cauda do balão inclinada */
+.balao-comentario::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: -3px; /* Puxa a ponta para a esquerda, em direção ao ponto */
+    border-width: 10px 15px 0 0; /* Cria um triângulo inclinado */
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+.npc-comentario .ponto-espiritual {
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
 }
