@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title> Para ti ♥ </title>
+        <title> Missão Salvar São Valentim Da Lígia  </title>
         <link rel="stylesheet" href="style.css">
         <link rel="icon" type="images/jpg" href="images/istockphoto-936563406-612x612.jpg">
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -16,10 +16,9 @@
 
     <div id="menuInicial">
         <div class="decoracoes">
-            <img src="images/1000046404.png" class="foto-principal" alt="coração">
             <img src="images/happy-cat-happy-happy-happy.gif" class="gato" alt="gatinho">
         </div>
-        <h1 class="titulo-jogo">MISSÃO SÃO VALENTIM</h1>
+        <h1 class="titulo-jogo">MISSÃO<br>SÃO VALENTIM</h1>
         <p class="subtitulo">(Clica no "Iniciar Jogo" para iniciar)</p>
         <button class="botao-start" onclick="iniciarJogo()">Iniciar História</button>
         <button class="btn-minijogos" onclick="irParaMenuJogos()">Minijogos 🎮</button>
@@ -62,7 +61,9 @@
     </div>
 
     <div id="paginaPergunta">
-        <h1 id="mensagem3">Aceitas-me como teu namorado neste dia de São Valentim?</h1>
+        <h1 id="mensagem3">
+            Aceitas-me como teu namorado <br> neste dia de São Valentim?
+        </h1>
         <div class="butoes">
             <button class="butaoSim" onclick="clicarButaoSim()">Sim</button>
             <button class="butaoNao" onclick="clicarButaoNao()">Não</button>
@@ -96,7 +97,23 @@
                 <div class="ponto-espiritual"></div>
             </div>
         </div>
-        <button class="butaoCarta" onclick="clicarButaoCarta()">Avançar</button>
+        <button class="butaoCarta" onclick="iniciarTransicaoCarta()">Avançar</button>
+    </div>
+
+    <div id="paginaTransicaoCarta" class="secao-jogos" style="display: none;">
+        <div class="container-ponto-premio flutuar-suave" id="container-envelope-ponto">
+
+            <div class="balao-texto mostrar-balao" id="balao-transicao">
+                <p id="texto-transicao"></p>
+            </div>
+
+            <div class="ponto-visual" id="ponto-entrega"></div>
+
+            <div id="envelope-rosa-container" style="display: none; position: absolute; cursor: pointer;">
+                <img src="images/envelope_carta_rosa_claro_114x162mm_fidji_80g_caixa_c_100_unidades_scrity_2669_1_4552c8918376df5e9a59b33e2d1fb950-removebg-preview.png" alt="Envelope Rosa"
+                     style="width: 60px; height: auto; transform: rotate(10deg);">
+            </div>
+        </div>
     </div>
 
     <div id="paginaCarta">
@@ -106,46 +123,70 @@
                 <div class="frente-grande"></div>
                 <div class="carta-grande">
                     <h2>Minha Querida Lígia,</h2>
-                    <p>Este é o primeiro parágrafo de um texto muito, muito longo. Aqui poderás escrever tudo o que sentes, todas as memórias que partilham, todos os sonhos para o futuro. A beleza desta carta é que ela pode ter o tamanho que precisares, pois a página irá rolar para acompanhar todo o teu coração.</p>
-                    <p>Lembro-me da primeira vez que te vi, da forma como o teu sorriso iluminou o meu dia. Cada momento desde então tem sido um presente, e cada dia contigo é uma aventura que eu nunca quis que acabasse.</p>
-                    <p>Desde os nossos cafés da manhã juntos, as nossas conversas intermináveis sobre tudo e mais alguma coisa, até aos silêncios confortáveis onde apenas a tua presença me completa. Cada um desses instantes é um tesouro que guardo com muito carinho. O teu apoio incondicional, a tua risada contagiante, a tua forma de ver o mundo, tudo isso me inspira e me faz querer ser uma pessoa melhor.</p>
-                    <p>Sei que a vida nos reserva muitas surpresas e desafios, mas com a tua mão na minha, sinto que podemos enfrentar qualquer coisa. Mal posso esperar por todas as novas memórias que vamos criar, as viagens que vamos fazer, os sonhos que vamos realizar juntos. O futuro é brilhante porque tu fazes parte dele.</p>
+                    <p>Estou te a enviar esta carta porque o Carlitos decidiu portar-se muito mal neste Dia de São Valentim. Em vez de deixar tudo simples e cheio de surpresas, achou que era uma excelente ideia esconder os presentes e transformá-los num desafio. Segundo ele, nada podia ser entregue sem antes ser conquistado. </p>
+                    <p>Por isso, espalhou as surpresas e criou várias missões que vais ter de completar para as ganhares de volta. Cada missão aproxima-te um pouco mais daquilo que ele escondeu e foi pensada para te pôr à prova de forma divertida. Não te preocupes, são apenas desafios à altura de alguém especial.</p>
+                    <p>Agora a aventura começa. Cabe-te a ti passar pelas missões, vencer o Carlitos e recuperar tudo o que ele tentou esconder.</p>
+                    <p>Boa sorte amorzinho, amo-te muitoooooo.</p>
                     <p>Com todo o meu amor e carinho,</p>
                     <p>O teu Namorado</p>
-                    <p>P.S. Escrevi esta carta para te recordar o quanto és especial para mim, hoje e sempre.</p>
+                    <p>P.S.: Estou cheio de saudades tuas, desculpa por tudo</p>
                 </div>
             </div>
         </div>
-        <button class="butaoCartaP2" onclick="clicarButaoCartaP2()">Avançar</button>
+        <button class="butaoCartaP2" onclick="irParaTransicaoJogos()">Avançar</button>
     </div>
 
-    <div id="paginaMenuJogos" class="secao-jogos" style="display: none;">
-        <h1 class="titulo-menu">Recupera os teus Presentes! 🎁</h1>
+    <div id="paginaTransicaoJogos">
+        <div class="npc-container flutuar-suave">
+            <div id="balao-transicao-jogos" class="balao-texto">
+                <p id="texto-transicao-jogos"></p>
+            </div>
+            <div class="ponto-espiritual"> <div class="ponto-visual"></div>
+            </div>
+        </div>
+    </div>
 
-        <div class="container-botoes-jogos">
-            <button class="btn-presente" onclick="irParaJogo(1)">
-                <span class="emoji-presente">🎁</span>
-                <div class="info-presente">
-                    <strong>Presente #1</strong>
-                    <p>Vence o desafio para desbloquear!</p>
-                </div>
+    <div id="paginaMenuJogos" style="display: none;">
+
+        <div class="secao-jogos"> <div class="npc-menu-container">
+            <div id="balao-menu" class="balao-texto-menu">
+                <p id="texto-ponto-menu">Estou aqui para te ajudar! ✨</p>
+            </div>
+            <div id="ponto-menu" class="ponto-espiritual flutuar-suave"></div>
+        </div>
+
+            <h1 class="titulo-menu">Recupera os teus Presentes! 🎁</h1>
+
+            <div class="container-botoes-jogos">
+                <button id="btn-jogo1" class="btn-presente" onclick="irParaJogo(1)">
+                    <span class="emoji-presente">🪣</span>
+                    <div class="info-presente">
+                        <strong>Presente #1</strong>
+                        <p>Nem tudo o que cai deve ser perdido.</p>
+                    </div>
+                </button>
+
+                <button id="btn-jogo2" class="btn-presente" onclick="irParaJogo(2)">
+                    <span class="emoji-presente">🎣</span>
+                    <div class="info-presente">
+                        <strong>Presente #2</strong>
+                        <p>Há tesouros escondidos onde poucos chegam.</p>
+                    </div>
+                </button>
+
+                <button id="btn-jogo3" class="btn-presente" onclick="irParaJogo(3)">
+                    <span class="emoji-presente">⏳</span>
+                    <div class="info-presente">
+                        <strong>Presente #3</strong>
+                        <p>Rápida, cuidadosa e com o coração no sítio certo.</p>
+                    </div>
+                </button>
+            </div>
+
+            <button id="btn-final" class="btn-contador" onclick="irParaDespedida()" disabled>
+                Jogos: <span id="contagem">0</span>/3
             </button>
 
-            <button class="btn-presente" onclick="irParaJogo(2)">
-                <span class="emoji-presente">🎁</span>
-                <div class="info-presente">
-                    <strong>Presente #2</strong>
-                    <p>O que será que está aqui dentro?</p>
-                </div>
-            </button>
-
-            <button class="btn-presente" onclick="irParaJogo(3)">
-                <span class="emoji-presente">🎁</span>
-                <div class="info-presente">
-                    <strong>Presente #3</strong>
-                    <p>Um último esforço, Lígia!</p>
-                </div>
-            </button>
         </div>
     </div>
 
@@ -174,19 +215,108 @@
 
     <div id="paginaLoveClicker" style="display: none;">
         <h1 class="titulo-jogo">LOVE CLICKER</h1>
-        <p class="subtitulo">Clica no coração para libertar o amor!</p>
+        <p class="subtitulo">Clica na Lulu para libertar o amor!</p>
 
         <div class="stats-game" style="font-family: 'fonteVIDEOJOGO', sans-serif; margin: 20px;">
             TEMPO: <span id="timer">10</span>s | CLIQUES: <span id="score-clicker">0</span>
         </div>
 
-        <div id="heart-btn">❤️</div>
+        <img id="heart-btn" src="images/1000046585.png" alt="Foto Clicker" class="heart-image" draggable="false">
 
         <div id="message-clicker" class="pixel-message" style="font-family: 'fonteVIDEOJOGO', sans-serif; color: #ff0055;"></div>
 
         <button id="start-clicker-btn" class="botao-start" onclick="iniciarContagemClicker()">
             Iniciar Jogo
         </button>
+
+        <button id="btn-voltar-vitoria" class="botao-start" style="display: none; background-color: #4CAF50;" onclick="ganharJogo(3)">
+            RECOLHER PRESENTE! 🎁
+        </button>
+    </div>
+
+    <div id="paginaTutorial" class="secao-jogos" style="display: none; background-color: #EAC2C9;">
+        <div class="npc-tutorial-container">
+            <div class="balao-texto-tutorial">
+                <p id="texto-tutorial">Explicação do jogo aqui...</p>
+            </div>
+            <div class="ponto-espiritual flutuar-suave"></div>
+        </div>
+
+        <div class="caixa-instrucoes">
+            <h2 id="titulo-tutorial">Como Jogar</h2>
+            <p id="instrucoes-detalhadas">Instruções aqui...</p>
+            <button id="btn-comecar-jogo" class="botao-start">COMEÇAR!</button>
+        </div>
+    </div>
+
+    <div id="paginaDespedida" class="secao-jogos" style="display:none;">
+        <h1 class="titulo-jogo">Obrigado por jogares!</h1>
+
+        <div class="container-qr">
+            <img src="images/ChatGPT_Image_10_02_2026_19_41_22-removebg-preview.png" alt="QR Code Coração" class="qr-final">
+        </div>
+
+        <p class="pixel-message">Espero que tenhas gostado desta surpresa...</p>
+    </div>
+
+    <div id="paginaPremio1" class="secao-jogos" style="display:none;">
+        <div class="container-ponto-premio" style="position: relative; display: flex; flex-direction: column; align-items: center;">
+
+            <div class="balao-texto mostrar-balao" id="balao-premio1">
+                <p id="texto-premio1"></p>
+            </div>
+
+            <div class="ponto-espiritual flutuar-suave" id="ponto-premio1">
+                <div class="ponto-visual"></div>
+            </div>
+
+            <img src="images/1000046424.png" id="balde-vitoria" style="display:none; width: 150px; height: auto;">
+
+            <div id="presente-vitoria" style="display:none; position: absolute; font-size: 55px; z-index: 20;">
+                🎁
+            </div>
+        </div>
+    </div>
+
+    <div id="paginaPremio2" class="secao-jogos" style="display:none;">
+        <div class="container-ponto-premio">
+            <div class="balao-texto mostrar-balao" id="balao-premio2">
+                <p id="texto-premio2"></p>
+            </div>
+
+            <div class="npc-com-presente flutuar-suave">
+                <div class="presente-resgatado" id="presente-p2">🎁</div> <div class="ponto-espiritual" id="ponto-premio2">
+                <div class="ponto-visual"></div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="paginaPremio3" class="secao-jogos" style="display:none;">
+        <div class="container-ponto-premio">
+            <div class="container-vitoria-lulu flutuar-suave" id="lulu-voa-container">
+                <div class="balao-texto mostrar-balao" id="balao-premio3">
+                    <p id="texto-premio3"></p>
+                </div>
+                <div class="foto-agradecimento">
+                    <img src="images/1000046585.png" id="lulu-agradece" style="width: 250px; height: auto;">
+                </div>
+            </div>
+
+            <div id="presente-final-3" class="presente-resgatado" style="display:none; font-size: 80px;">🎁</div>
+        </div>
+    </div>
+
+    <div id="paginaTransicaoPedido" style="display: none;">
+        <div class="npc-container flutuar-suave">
+            <div id="balao-transicao-final" class="balao-texto">
+                <p id="texto-transicao-ponto"></p>
+            </div>
+
+            <div id="ponto-final-transicao" class="ponto-espiritual">
+                <div class="ponto-visual"></div>
+            </div>
+        </div>
     </div>
 
     </body>

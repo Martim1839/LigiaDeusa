@@ -27,38 +27,33 @@ canvas {
 }
 
 #menuInicial {
-    position: relative; /* Importante para o posicionamento absoluto da imagem */
+    background-image: url('images/ChatGPT Image Feb 10, 2026, 10_46_49 PM.png');
+    background-size: cover;
+    background-position: bottom center; /* Foca na parte de baixo para garantir que os livros aparecem */
+    background-repeat: no-repeat;
+
+    /* Força o preenchimento total ignorando o body */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100vw;
     height: 100vh;
+    z-index: 100; /* Garante que fica por cima do fundo rosa */
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    overflow: hidden;
-}
-
-/* Estilo específico para a foto do menu principal */
-.foto-principal {
-    position: absolute;
-    top: 450px;          /* Distância do topo */
-    right: 70px;        /* Distância da direita */
-    width: 200px;       /* Tamanho da foto */
-    height: auto;
-
-    /* Inclinação leve de 10 graus (ajusta se quiseres mais ou menos) */
-    transform: rotate(10deg);
-
-    z-index: 10;
-    pointer-events: none; /* Garante que não atrapalha cliques em botões */
+    justify-content: center;
 }
 
 .gato {
     position: absolute;
-    top: 450px;          /* Distância do topo */
-    right: 1250px;        /* Distância da direita */
+    top: 440px;          /* Distância do topo */
+    right: 675px;        /* Distância da direita */
     width: 200px;       /* Tamanho da foto */
     height: auto;
-    transform: rotate(-10deg);
     z-index: 10;
     pointer-events: none; /* Garante que não atrapalha cliques em botões */
 }
@@ -67,10 +62,25 @@ canvas {
 }
 
 .titulo-jogo {
-    font-size: 40px;
-    color: #ff0055;
-    text-shadow: 4px 4px #000;
-    margin: 0;
+    font-family: 'fonteVIDEOJOGO', sans-serif;
+    font-size: 50px; /* Aumentei um pouco para dar mais impacto */
+    color: #FCE5CD;
+    text-align: center; /* Garante que as duas linhas ficam centradas */
+    line-height: 1.5;  /* Faz o "São Valentim" subir para perto do "Missão" */
+    margin: 20px 0;
+    text-transform: uppercase;
+    margin-top: -70px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 10;
+
+    /* Contorno grosso (Outline) para o estilo Pixel Art */
+    text-shadow:
+        -4px -4px 0 #000,
+         4px -4px 0 #000,
+        -4px  4px 0 #000,
+         4px  4px 0 #000,
+         0px  8px 0 #000; /* Sombra de profundidade maior */
 }
 
 .subtitulo {
@@ -286,7 +296,7 @@ button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
     cursor: pointer;
     position: relative;
     overflow: visible;
@@ -412,8 +422,8 @@ button {
 }
 
 @keyframes voarParaBaixo {
-    0% { transform: translate(0, 0) scale(1); opacity: 1; }
-    100% { transform: translate(-300px, 600px) scale(0.5); opacity: 0; }
+    0% { transform: translate(0, 78px) scale(1); opacity: 1; }
+    100% { transform: translate(500px, -500px) scale(0.5); opacity: 0; }
 }
 
 /* Animação de Entrada na Página de Fotos */
@@ -556,6 +566,104 @@ button {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* Garante que o ponto de entrega apareça com as mesmas características dos outros */
+#ponto-entrega {
+    width: 35px;
+    height: 35px;
+    background-color: #000;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    margin: 0;
+    z-index: 10; /* Fica por cima da carta se necessário */
+}
+
+#paginaTransicaoCarta {
+    display: none;
+    opacity: 0; /* Começa em zero para a animação ter efeito */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #EAC2C9;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#container-envelope-ponto {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    position: relative;
+}
+
+#envelope-rosa-container {
+    /* Ajustes para o envelope de 60px ficar "na mão" do ponto */
+    left: 15px !important;
+    top: 5px !important;
+}
+
+#envelope-rosa-container img {
+    filter: drop-shadow(0 0 15px rgba(255, 182, 193, 0.8));
+    transition: transform 0.3s ease;
+    width: 60px !important;
+}
+
+#envelope-rosa-container img:hover {
+    transform: scale(1.1) rotate(2deg);
+}
+
+/* Forçar o balão da transição a comportar-se como os outros mas com ajuste de texto */
+#balao-transicao {
+    display: none; /* Controlado pelo JS (mostrar-balao) */
+    position: absolute;
+    bottom: 60px;   /* Posiciona acima do ponto */
+    left: 50%;
+    transform: translateX(-50%);
+
+    /* Configurações de tamanho para o texto não fugir */
+    width: max-content;
+    max-width: 280px;
+    height: auto;
+    white-space: normal; /* Permite que o texto mude de linha se for grande */
+    word-wrap: break-word;
+    text-align: center;
+    z-index: 1001;
+}
+
+#texto-transicao {
+    margin: 0;
+    color: black;
+    font-family: Arial, sans-serif; /* Ou a fonte que usas nos balões normais */
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+/* Esta classe será adicionada via JS no momento da entrega */
+.entrega-finalizada {
+    /* Removemos a flutuação para a descida não ser tremida */
+    animation: mergulhoParaBaixo 2s cubic-bezier(0.47, 0, 0.745, 0.715) forwards !important;
+}
+
+@keyframes mergulhoParaBaixo {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(120vh) scale(0.6); opacity: 0; }
+}
+
+.fade-in-suave {
+    animation: fadeInAnim 1.5s ease forwards;
+}
+
+@keyframes fadeInAnim {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
 .butaoCartaP2 {
     position: fixed;
     bottom: 20px;
@@ -585,11 +693,21 @@ button {
 
 /* --- Container principal do envelope --- */
 .envelope-wrapper-grande {
-  position: relative;
-  width: 500px; /* Largura do envelope */
-  height: 300px; /* Altura do envelope fechado */
-  perspective: 1000px; /* Para a animação 3D da aba */
-  margin-bottom: -150px; /* Puxa um pouco para baixo para a base ficar escondida */
+    position: relative;
+    width: 500px;
+    height: 300px;
+    perspective: 1000px;
+    margin-bottom: -150px;
+
+    /* NOVO: Começa abaixo do ecrã e invisível */
+    transform: translateY(100vh);
+    opacity: 0;
+    transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 1s ease;
+}
+
+.envelope-wrapper-grande.visivel {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 .envelope-grande {
@@ -668,6 +786,27 @@ button {
   z-index: 1;
 }
 
+#paginaTransicaoJogos {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Puxa para cima */
+    padding-top: 27vh;           /* Distância do topo */
+    width: 100vw;
+    height: 100vh;
+    background-color: #EAC2C9;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 600;
+}
+
+#paginaTransicaoJogos .balao-texto.mostrar-balao {
+    display: block;
+    opacity: 1;
+    margin-bottom: 20px;
+}
+
 @font-face {
     font-family: 'Dancing Script';
     src: url('fonts/DancingScript-VariableFont_wght.ttf') format('truetype');
@@ -726,9 +865,17 @@ button {
     filter: drop-shadow(2px 2px 0px #000);
 }
 
+
+.info-presente {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Força títulos e parágrafos para a esquerda */
+}
+
 .info-presente strong {
     font-family: 'fonteVIDEOJOGO', sans-serif;
-    font-size: 20px;
+    font-size: 24px;
+    margin-bottom: 5px;
     color: #ff4d6d; /* Cor de destaque */
 }
 
@@ -748,6 +895,125 @@ button {
     box-shadow: 4px 4px 0px #000;
 }
 
+/* Classe para o botão desativado */
+.botao-ganho {
+    position: relative;
+    overflow: hidden;
+    opacity: 0.8;
+    cursor: not-allowed !important;
+    pointer-events: none; /* Garante que não há cliques */
+}
+
+/* Criar um X vermelho por cima do botão */
+.botao-ganho::before, .botao-ganho::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.botao-ganho::before {
+    background: linear-gradient(to top right,
+    transparent calc(50% - 4px),
+    #ff0000 calc(50% - 4px),
+    #ff0000 calc(50% + 4px),
+    transparent calc(50% + 4px));
+}
+
+.botao-ganho::after {
+    background: linear-gradient(to bottom right,
+    transparent calc(50% - 4px),
+    #ff0000 calc(50% - 4px),
+    #ff0000 calc(50% + 4px),
+    transparent calc(50% + 4px));
+}
+
+.botao-ganho .info-presente strong,
+.botao-ganho .info-presente p {
+    position: relative;
+    z-index: 1;
+}
+
+.botao-ganho .emoji-presente {
+    filter: sepia(1);
+}
+
+.btn-contador {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 15px 25px;
+    font-size: 18px;
+    background-color: #555; /* Cor cinza enquanto bloqueado */
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: not-allowed;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Quando os 3 jogos são ganhos, o botão "ganha vida" */
+.btn-contador.desbloqueado {
+    background-color: #ff4d6d; /* Rosa/Vermelho vibrante */
+    cursor: pointer;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Container do NPC no Menu */
+.npc-menu-container {
+    position: fixed; /* Fica fixo no ecrã */
+    left: 150px;      /* Distância da borda esquerda */
+    bottom: 40%;     /* Altura no ecrã */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1100;
+}
+
+/* O ponto preto */
+#ponto-menu {
+    width: 40px;
+    height: 40px;
+    background-color: #000;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+/* O balão de fala específico do menu */
+.balao-texto-menu {
+    background: white;
+    border: 3px solid black;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    width: 180px;
+    position: relative;
+    font-size: 14px;
+    text-align: center;
+    box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
+}
+
+/* A cauda do balão apontando para o ponto */
+.balao-texto-menu::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 10px 0 10px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
 #player {
     transition: left 0.1s ease-out;
     will-change: left;
@@ -755,7 +1021,7 @@ button {
 
 #paginaVideoJogo {
     /* Imagem principal de fundo */
-    background-image: url('images/pngtree-pastel-pink-textured-background-with-abstract-watercolor-painting-image_13721736.png');
+    background-image: url('images/ChatGPT Image Feb 10, 2026, 06_53_02 PM.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -941,15 +1207,15 @@ button {
 }
 
 #pixel-transition {
-    position: fixed; /* Fixado no ecrã, não no body */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    z-index: 100000; /* Acima de TUDO */
-    pointer-events: none;
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 999999; /* Garante que fica por cima de tudo */
+    pointer-events: none; /* Deixa clicar nos botões por baixo */
 }
 
 .pixel-block {
@@ -962,16 +1228,21 @@ button {
 
 #paginaLoveClicker {
     display: flex;
-    flex-direction: column; /* Força os elementos a ficarem um por baixo do outro */
-    align-items: center;    /* Centraliza horizontalmente */
-    justify-content: center; /* Centraliza verticalmente */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100vw;
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #EAC2C9; /* Garante que o fundo cobre tudo */
     z-index: 2500;
+
+    /* --- NOVAS LINHAS PARA O FUNDO --- */
+    background-image: url('images/ChatGPT Image Feb 10, 2026, 06_57_03 PM.png'); /* Substitui pelo nome correto do ficheiro */
+    background-size: cover;       /* Faz a imagem ocupar o ecrã todo */
+    background-position: center;  /* Centra a imagem */
+    background-repeat: no-repeat; /* Impede que a imagem se repita */
 }
 
 #paginaLoveClicker .titulo-jogo {
@@ -984,27 +1255,31 @@ button {
     font-size: 14px;
 }
 
-#heart-btn {
-    font-size: 100px;
-    margin: 20px 0;
-    cursor: pointer;
-    transition: transform 0.1s;
 
-    /* REMOVE O CONTORNO AZUL E A SELEÇÃO */
-    outline: none;
+
+/* Estilo da Foto que substitui o Coração */
+.heart-image {
+    width: 250px;
+    height: 250px;
+    object-fit: contain; /* Mantém para a foto não distorcer */
+
+    /* Alterações principais: */
+    border-radius: 0;      /* Remove o círculo */
+    background-color: transparent; /* Remove a cor de fundo */
+    border: none;          /* Garante que não há bordas */
+    box-shadow: none;      /* Remove a sombra */
+
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
     user-select: none;
     -webkit-user-drag: none;
-    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Garante que imagens dentro do botão também não sejam arrastáveis */
-#heart-btn img {
-    pointer-events: none;
-    user-select: none;
-}
-
-#heart-btn:active {
-    transform: scale(1.2);
+/* Efeito de "Botão Pressionado" ao clicar na foto */
+.heart-image:active {
+    transform: scale(0.92); /* Encolhe ligeiramente */
 }
 
 /* Estilo das estatísticas e mensagens para combinar com o teu site */
@@ -1096,3 +1371,350 @@ button {
     height: 30px;
     margin-left: 5px;
 }
+
+#paginaTutorial {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+}
+
+.caixa-instrucoes {
+    background: white;
+    border: 4px solid black;
+    padding: 30px;
+    max-width: 500px;
+    border-radius: 15px;
+    box-shadow: 10px 10px 0px rgba(0,0,0,0.1);
+}
+
+.caixa-instrucoes h2 {
+    font-family: 'fonteVIDEOJOGO', sans-serif;
+    color: #ff4d6d;
+    margin-bottom: 20px;
+}
+
+.caixa-instrucoes p {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.balao-texto-tutorial {
+    background: white;
+    border: 3px solid black;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.container-ponto-premio {
+    display: flex;
+    flex-direction: column; /* Força um em cima do outro */
+    align-items: center;    /* Centra horizontalmente */
+    justify-content: center;
+    gap: 20px;             /* Espaço entre o balão e o ponto */
+    width: 100%;           /* Garante que ocupa a largura total para centrar */
+}
+
+.ponto-espiritual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#paginaPremio1 {
+    display: none;
+    opacity: 1; /* Volta a 1, porque os pixéis é que fazem o efeito */
+    pointer-events: auto !important;
+    cursor: pointer;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #EAC2C9;
+}
+
+#paginaPremio2 {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #EAC2C9;
+    opacity: 1 !important; /* Força a visibilidade total para os pixéis revelarem */
+}
+
+/* Ajuste do balão para não ter margens que o empurrem para o lado */
+#balao-premio1 {
+    margin: 0 auto 10px auto !important;
+    position: relative;
+}
+
+/* Ponto sobe rápido */
+.ponto-subir-vitoria {
+    animation: voarParaCimaSaida 1s forwards ease-in !important;
+}
+
+@keyframes voarParaCimaSaida {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-600px); opacity: 0; }
+}
+
+#paginaPremio3 {
+    display: none;
+    opacity: 0; /* Começa invisível */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #EAC2C9;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Balde sobe com impacto após o ponto sair */
+.balde-entrar-vitoria {
+    display: block !important;
+    animation: baldeSubir 1.2s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes baldeSubir {
+    0% { transform: translateY(600px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.animar-presente {
+    display: block !important;
+    /* Ajusta a posição inicial para o centro do balde */
+    bottom: 100px;
+    animation: saltarDoBalde 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes saltarDoBalde {
+    0% {
+        transform: translateY(0) scale(0);
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    100% {
+        /* Ele sobe e fica ligeiramente maior que o balde */
+        transform: translateY(-130px) scale(1.6);
+        opacity: 1;
+    }
+}
+
+#paginaDespedida .titulo-jogo {
+    margin-top: 12vh;    /* Controla a altura de onde o título começa */
+    margin-bottom: 5px;  /* Reduzido para quase zero para aproximar o QR */
+    text-align: center;
+}
+
+#paginaDespedida {
+    display: none; /* O JS mudará para flex */
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Alinha ao topo para a margem do título funcionar */
+    height: 100vh;
+    width: 100vw;
+}
+
+.container-qr {
+    margin-top: 0px;     /* Remove qualquer espaço extra acima do QR */
+    margin-bottom: 20px; /* Mantém algum espaço para o texto de baixo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.qr-final {
+    width: 400px;
+    height: auto;
+    /* Removemos margens internas da própria imagem se existirem */
+    display: block;
+}
+
+/* Efeito ao passar o rato (opcional) */
+.qr-final:hover {
+    transform: scale(1.1);
+}
+
+.npc-com-presente {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap: 5px; /* Espaço curto para parecer que está a segurar */
+}
+
+.presente-resgatado {
+    font-size: 40px;
+    filter: drop-shadow(0 0 10px gold); /* Efeito de brilho de tesouro */
+    animation: balancar 2s ease-in-out infinite;
+}
+
+@keyframes balancar {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+.foto-agradecimento {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#lulu-agradece {
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+/* Container que agrupa Balão + Foto para flutuarem e saírem juntos */
+.container-vitoria-lulu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Reutilizamos a animação de subir que criaste para o ponto */
+.lulu-subir-vitoria {
+    animation: voarParaCimaSaida 1s forwards ease-in !important;
+}
+
+/* Estilo do presente que aparece no fim */
+.presente-entrar-vitoria {
+    display: block !important;
+    animation: baldeSubir 1.2s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#paginaTransicaoPedido {
+    display: none; /* Alterado para flex via JS */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 85vh;
+    background-color: #EAC2C9;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 500;
+}
+
+#paginaTransicaoPedido .npc-container {
+    margin-top: 0;
+}
+
+/* Garante que o balão nesta página específica seja visível quando disparado */
+#paginaTransicaoPedido .balao-texto.mostrar-balao {
+    display: block;
+    opacity: 1;
+    margin-bottom: 20px;
+}
+
+#paginaPergunta {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    gap: 40px;
+
+    /* --- NOVAS LINHAS PARA A IMAGEM --- */
+    background-image: url('images/ChatGPT Image Feb 13, 2026, 01_48_08 AM.png'); /* Coloca aqui o nome do ficheiro */
+    background-size: cover;       /* Faz a imagem ocupar o ecrã todo */
+    background-position: center;  /* Centra a imagem para o lago ficar no meio */
+    background-repeat: no-repeat;
+
+    /* Opcional: manter o background-color como 'fallback' enquanto a imagem carrega */
+    background-color: #EAC2C9;
+}
+
+#mensagem3 {
+    font-family: 'fonteVIDEOJOGO', sans-serif;
+    color: #FCE5CD;
+    font-size: 24px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0 20px;
+    transition: transform 0.3s ease; /* Permite que o título se mova suavemente */
+    text-align: center;
+}
+
+.butoes {
+    display: flex; /* Botões Sim e Não continuam lado a lado */
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.animar-pagina-fade {
+    animation: fadeInPagina 2s ease-out forwards;
+}
+
+@keyframes fadeInPagina {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+#paginaMenuJogos {
+    display: none; /* Mantém como está, o JS muda para flex */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    /* CONFIGURAÇÃO DA IMAGEM */
+    background-image: url('images/ChatGPT Image Feb 12, 2026, 11_57_00 PM.png');
+    background-size: cover;      /* Faz a imagem ocupar o ecrã todo */
+    background-position: center; /* Centra a imagem */
+    background-repeat: no-repeat;
+
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Remove o padding-bottom: 108vh daqui se ele ainda lá estiver */
+.secao-jogos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Alinha ao topo */
+    padding-top: 5vh;            /* Pequeno espaço do topo para o título */
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* Ajuste específico para o Título e Botões subirem */
+#paginaMenuJogos .titulo-menu {
+    margin-top: 20px;            /* Ajusta este valor para subir/descer o título */
+    margin-bottom: 30px;
+}
+
+#paginaMenuJogos .container-botoes-jogos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;                   /* Diminuir o espaço entre botões ajuda a subir o conjunto */
+    margin-top: 0;
+}
+

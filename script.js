@@ -1,3 +1,9 @@
+let premiosGanhos = []; // <--- ADICIONA ESTA LINHA NO TOPO DO SCRIPT
+
+const somPonto = new Audio('sounds/PontoFlutuanteFala.mp3');
+somPonto.volume = 0.4;
+
+let intervaloMenuJogos = null;
 
 function iniciarJogo() {
     const transitionContainer = document.getElementById("pixel-transition");
@@ -94,11 +100,13 @@ function newBlocksAnimation(container, colunas, total, callbackMid) {
 }
 
 const mensagens = [
-     "Heeeeey, está alguém aí?!",
-     "Estou a procura de uma pessoa, não sei se me podes ajudar...",
-     "O meu dono falou-me de uma rapariga belíssima",
-     "Parece que já a encontrei",
-     "Mas para verificar que és mesmo ela, preciso perguntar pelo teu nome?"
+     "Heeeeey, nem reparei que estás aí!",
+     "Sabes, é que eu tenho andado com a cabeça cheia...",
+     "Esta missão que o meu dono deu não me sai da cabeça",
+     "Aiiii, mas que falta de educação a minha.",
+     "Ainda nem me apresentei.",
+     "Eu sou o BIP, o animal espiritual do meu dono Martim Andrade de Sá",
+     "E tu, como te chamas?"
 ];
 
 let indiceMensagem = 0;
@@ -164,8 +172,14 @@ function avancarMensagem () {
         // Efeito de escrever da esquerda para a direita
         const intervalo = setInterval(() => {
             elementoTexto.textContent += textoCompleto[i];
-            i++;
 
+            if (textoCompleto[i] !== " " && i % 3 === 0) {
+                const somCurto = somPonto.cloneNode(true);
+                somCurto.volume = 0.1;
+                somCurto.play().catch(e => {});
+            }
+
+            i++;
             if (i >= textoCompleto.length) {
                 clearInterval(intervalo);
                 digitando = false; // Liberta o clique para a próxima mensagem
@@ -199,10 +213,12 @@ function avancarMensagem () {
 }
 
 const mensagensLigia = [
-    "Eu sabia que eras tu!",
-    "O meu dono tinha razão, és mesmo deslumbrante...",
-    "Ele preparou algo especial para ti.",
-    "Estás pronta?"
+    "Lígia?!",
+    "Era mesmo de ti que eu estava á procura",
+    "És mesmo deslumbrante, tal como o meu dono tinha descrito...",
+    "Ele falou-me MUITO de ti e dos momentos que vocês passaram juntos",
+    "4 meses já não é nenhuma brincadeira",
+    "Vamos relembrar em conjunto algumas dessas memórias"
 ];
 
 let indiceLigia = 0;
@@ -220,8 +236,14 @@ function avancarMensagemLigia() {
 
         const intervalo = setInterval(() => {
             elementoTexto.textContent += textoCompleto[i];
-            i++;
 
+            if (textoCompleto[i] !== " " && i % 3 === 0) {
+                const somCurto = somPonto.cloneNode(true);
+                somCurto.volume = 0.1;
+                somCurto.play().catch(e => {});
+            }
+
+            i++;
             if (i >= textoCompleto.length) {
                 clearInterval(intervalo);
                 digitandoLigia = false;
@@ -295,34 +317,46 @@ const mensagensNo = [
     "Olha que eu fico triste 😢",
     "FICO MUITO MUITO TRISTE!",
     "DIZ SÓ QUE SIM, POR MIM QUERIDA...",
-    "PORFAVOR QUERIDA EU FAÇO QUALQUER COISA POR TI..."
+    "PORFAVOR QUERIDA EU FAÇO QUALQUER COISA POR TI...",
+    "PLS AMOR"
 ];
 
 let indiceNao = 0;
 
+let deslocamentoTitulo = 0; // Variável para controlar a subida do título
+
 function clicarButaoNao() {
     const noButton = document.querySelector(".butaoNao");
     const yesButton = document.querySelector(".butaoSim");
+    const titulo = document.getElementById("mensagem3");
 
-    // mudar o texto do botão No
+    // 1. Mudar o texto do botão No
     noButton.textContent = mensagensNo[indiceNao];
-    if (indiceMensagem < mensagensNo.length) {
+    if (indiceNao < mensagensNo.length - 1) {
         indiceNao++;
     }
 
-    // aumentar o tamanho do botão Yes
-    const tamanhoAtual = parseFloat(
-        window.getComputedStyle(yesButton).fontSize
-    );
+    // 2. Aumentar o tamanho do botão Yes
+    const tamanhoAtual = parseFloat(window.getComputedStyle(yesButton).fontSize);
+    const novoTamanho = tamanhoAtual * 1.4;
+    yesButton.style.fontSize = novoTamanho + "px";
 
-    yesButton.style.fontSize = (tamanhoAtual * 1.4) + "px";
+    // 3. MOVER O TÍTULO PARA CIMA
+    // À medida que o botão cresce, empurramos o título proporcionalmente
+    deslocamentoTitulo -= 3.7;
+    titulo.style.transform = `translateY(${deslocamentoTitulo}px)`;
+    titulo.style.transition = "transform 0.3s ease-out";
 }
 
 function clicarButaoSim() {
     document.getElementById("paginaPergunta").style.display = "none";
-    document.getElementById("paginaSim").style.display = "block";
     dispararConfetis();
-    atualizarVisualCarrossel();
+    const paginaDespedida = document.getElementById("paginaDespedida");
+    if (paginaDespedida) {
+        paginaDespedida.style.display = "flex";
+    } else {
+        console.log("Página de despedida não encontrada. A criar fluxo...");
+    }
 }
 
 function dispararConfetis() {
@@ -350,6 +384,9 @@ function dispararConfetis() {
 }
 
 const listaFotos = [
+    "images/1000046671.jpg", "images/1000046672.jpg",
+    "images/1000046673.jpg", "images/1000046674.jpg",
+    "images/1000046675.jpg", "images/1000046676.jpg", "images/1000046677.jpg",
     "images/IMG-20250921-WA0030.jpg", "images/IMG-20251005-WA0006.jpg",
     "images/IMG-20251101-WA0008.jpg", "images/IMG_20251010_235107_172.jpg",
     "images/IMG_20260105_231718_265.jpg", "images/IMG_20251107_200129_414.jpg",
@@ -357,16 +394,36 @@ const listaFotos = [
     "images/2ad72b06735cbc74a7f1015697b57127.jpg", "images/asdasd.jpg",
     "images/20251211_161246.jpg", "images/IMG-20250921-WA0004.jpg",
     "images/IMG-20250921-WA0028.jpg", "images/IMG-20251005-WA0008.jpg", "images/IMG-20251101-WA0029.jpg",
-    "images/IMG-20251109-WA0018.jpg", "images/IMG-20251101-WA0031.jpg",
+    "images/IMG-20251109-WA0018.jpg",
     "images/IMG_20251109_193223_611.jpg", "images/IMG_20260115_214513_204.jpg"
 ];
 
 const comentariosFotos = [
-    "Aqui estavas radiante! 😍",           // Foto 0
-    "Este dia foi inesquecível...",       // Foto 1
-    "Olha só esse sorriso! ✨",            // Foto 2
-    "O meu dono adora esta foto.",        // Foto 3
-    "Ficam tão bem juntos! ♥",            // Foto 4
+    "Vocês já pintaram uma caneca juntos",
+    "Compraram pulseiras a combinar",
+    "Já foram jantar sushi juntos (mais que uma vez)",
+    "Experimentaram bebidas do Starbucks juntos",
+    "E deste dia, lembraste?!",
+    "Já fizeram vasos de flores e versões de vocês em plasticina",
+    "Fizeram abóboras personalizadaas",
+    "Passaram muito tempo na praia durante o verão",
+    "Esta foto foi num dia super especial...",
+    "Foram disfarçados a combinar no Halloween",
+    "Ficam tão bem juntos! ♥",
+    "O meu dono adora esta foto",
+    "Ele disse-me que adorava descansar contigo",
+    "122 dias juntos",
+    "Hahahhaa que foto fofinha",
+    "Foram dadas muitas rosas",
+    "Vocês foram feitos um para o outro",
+    "Que flores bonitas",
+    "O Andrade disse que ama sair contigo",
+    "Ouvi falar também imenso sobre os teus beijinhos",
+    "Que anel LINDOOOOOOOOO",
+    "Ficas tão bem com essas flores",
+    "Incrível como ficas bem em todas as fotos",
+    "Sweattt bonitaaaaaaaa <3",
+    "Acho que o teu dono precisa de um beijinho agora"
 ];
 
 let fotoAtual = 0;
@@ -423,8 +480,14 @@ function atualizarComentario() {
 
     intervaloComentario = setInterval(() => {
         elementoTexto.textContent += textoCompleto[i];
-        i++;
 
+        if (textoCompleto[i] !== " " && i % 3 === 0) {
+            const somCurto = somPonto.cloneNode(true);
+            somCurto.volume = 0.05; // Mais baixinho nas fotos para ser subtil
+            somCurto.play().catch(e => {});
+        }
+
+        i++;
         if (i >= textoCompleto.length) {
             clearInterval(intervaloComentario);
             intervaloComentario = null;
@@ -440,6 +503,123 @@ function clicarButaoCarta() {
     setTimeout(abrirEnvelope, 800);
 }
 
+function iniciarTransicaoCarta() {
+    const paginaSim = document.getElementById("paginaSim");
+    const paginaTransicao = document.getElementById("paginaTransicaoCarta");
+
+    if (paginaSim) paginaSim.style.display = "none";
+
+    if (paginaTransicao) {
+        paginaTransicao.style.display = "flex";
+        paginaTransicao.classList.remove("animar-pagina-fade");
+        void paginaTransicao.offsetWidth; // Truque para reiniciar a animação
+        paginaTransicao.classList.add("animar-pagina-fade");
+    }
+
+    const textoElemento = document.getElementById("texto-transicao");
+    const balao = document.getElementById("balao-transicao");
+    const containerPonto = document.getElementById("container-envelope-ponto");
+    const envelope = document.getElementById("envelope-rosa-container");
+    const mensagem = "Mas prontos, estou a desenvolver demais, o meu dono tinha-me pedido para te entregar isto, vou te deixar ler sozinha";
+
+    // O resto do teu código continua igual...
+    textoElemento.textContent = "";
+    balao.style.display = "block";
+    balao.classList.add("mostrar-balao");
+
+    envelope.style.display = "none";
+    containerPonto.classList.remove("entrega-finalizada");
+    containerPonto.classList.add("flutuar-suave");
+
+    let i = 0;
+    if (window.intervaloTransicao) clearInterval(window.intervaloTransicao);
+
+    window.intervaloTransicao = setInterval(() => {
+        if (i < mensagem.length) {
+            textoElemento.textContent += mensagem[i];
+
+            if (mensagem[i] !== " " && i % 3 === 0) {
+                const somCurto = somPonto.cloneNode(true);
+                somCurto.volume = 0.05;
+                somCurto.play().catch(e=>{});
+            }
+            i++;
+        } else {
+            clearInterval(window.intervaloTransicao);
+
+            // Texto terminou, aparece o envelope pequeno
+            envelope.style.display = "block";
+
+            // Espera o clique para "mergulhar"
+            setTimeout(() => {
+                window.addEventListener('click', function tratarQueda() {
+                    window.removeEventListener('click', tratarQueda);
+
+                    // --- O QUE MUDA AQUI ---
+                    // Removemos o balão IMEDIATAMENTE antes da animação
+                    balao.classList.remove("mostrar-balao");
+                    balao.style.display = "none";
+
+                    // Inicia o mergulho do Ponto com a carta
+                    containerPonto.classList.remove("flutuar-suave");
+                    containerPonto.classList.add("entrega-finalizada");
+
+                    setTimeout(() => {
+                        paginaTransicao.style.display = "none";
+                        abrirCartaReal();
+                    }, 2000);
+                }, { once: true });
+            }, 500); // Pausa de meio segundo para evitar cliques acidentais
+        }
+    }, 50);
+}
+
+// Função auxiliar para escrever (evita repetir código)
+function escreverEfeito(msg, callback) {
+    const textoElemento = document.getElementById("texto-transicao");
+    textoElemento.textContent = "";
+    let i = 0;
+    if (window.intervaloTransicao) clearInterval(window.intervaloTransicao);
+
+    window.intervaloTransicao = setInterval(() => {
+        if (i < msg.length) {
+            textoElemento.textContent += msg[i];
+            if (msg[i] !== " " && i % 3 === 0) {
+                const somCurto = somPonto.cloneNode(true);
+                somCurto.volume = 0.1;
+                somCurto.play().catch(e => {});
+            }
+            i++;
+        } else {
+            clearInterval(window.intervaloTransicao);
+            if (callback) callback();
+        }
+    }, 50);
+}
+
+function abrirCartaReal() {
+    // 1. Esconde a transição e mostra a página da carta
+    document.getElementById("paginaTransicaoCarta").style.display = "none";
+    const paginaCarta = document.getElementById("paginaCarta");
+    paginaCarta.style.display = "flex";
+
+    window.scrollTo(0, 0);
+
+    // 2. Seleciona o wrapper e adiciona a classe para ele SUBIR
+    const wrapper = document.querySelector('.envelope-wrapper-grande');
+
+    // Pequeno delay para o browser processar o display: flex antes da animação
+    setTimeout(() => {
+        wrapper.classList.add('visivel');
+    }, 100);
+
+    // 3. Espera o envelope acabar de subir (1.5s) para depois abrir
+    // Usamos 1800ms para dar uma pequena pausa dramática no topo
+    setTimeout(() => {
+        abrirEnvelope();
+    }, 1800);
+}
+
 function abrirEnvelope() {
     const envelope = document.querySelector('.envelope-grande');
     if (envelope) {
@@ -449,58 +629,334 @@ function abrirEnvelope() {
 
 function clicarButaoCartaP2() {
     document.getElementById("paginaCarta").style.display = "none";
-    const paginaVideoJogo = document.getElementById("paginaVideoJogo");
-    // Mostra a página
-    paginaVideoJogo.style.display = "flex";
-    paginaVideoJogo.style.flexDirection = "column"; // Garante que o score e o player alinham bem
-    iniciarMinijogo();
+
+    // Mostra a transição
+    const pag = document.getElementById("paginaTransicaoJogos");
+    pag.style.display = "flex";
+
+    // Mostra o balão e inicia o texto
+    document.getElementById("balao-transicao-jogos").classList.add("mostrar-balao");
+    iniciarFalaTransicaoJogos();
+}
+
+function irParaTransicaoJogos() {
+    executarTransicaoPixel(() => {
+        // 1. Esconde a carta
+        document.getElementById("paginaCarta").style.display = "none";
+
+        // 2. Mostra a página de transição
+        const pag = document.getElementById("paginaTransicaoJogos");
+        pag.style.display = "flex";
+
+        // 3. Aplica o Fade In ao Ponto
+        const ponto = pag.querySelector(".ponto-espiritual");
+        ponto.classList.add("fade-in-suave");
+
+        // 4. Mostra o balão e começa a falar
+        const balao = document.getElementById("balao-transicao-jogos");
+        balao.classList.add("mostrar-balao");
+
+        iniciarFalaTransicaoJogos();
+    });
+}
+
+function iniciarFalaTransicaoJogos() {
+    const textoEl = document.getElementById("texto-transicao-jogos");
+    const mensagem = "O Carlitos pensa que manda nisto tudo... mas eu estou aqui para te ajudar! Vamos logo recuperar os teus presentes";
+
+    textoEl.textContent = "";
+    let i = 0;
+    if (window.intervaloTransJogos) clearInterval(window.intervaloTransJogos);
+
+    window.intervaloTransJogos = setInterval(() => {
+        if (i < mensagem.length) {
+            textoEl.textContent += mensagem[i];
+
+            if (mensagem[i] !== " " && i % 3 === 0) {
+                if (typeof somPonto !== 'undefined') {
+                    const somCurto = somPonto.cloneNode(true);
+                    somCurto.volume = 0.1;
+                    somCurto.play().catch(e => {});
+                }
+            }
+            i++;
+        } else {
+            clearInterval(window.intervaloTransJogos);
+
+            const dica = document.createElement("p");
+            dica.style.fontSize = "10px";
+            dica.style.marginTop = "8px";
+            dica.style.opacity = "0.6";
+            textoEl.appendChild(dica);
+
+            // Clique para ir para o Menu de Jogos com a transição de pixéis
+            window.addEventListener('click', function entrarNosJogos() {
+                window.removeEventListener('click', entrarNosJogos);
+
+                // Adicionei a transição de pixéis aqui para não ser um corte seco
+                executarTransicaoPixel(() => {
+                    document.getElementById("paginaTransicaoJogos").style.display = "none";
+                    irParaMenuJogos();
+                });
+            }, { once: true });
+        }
+    }, 50);
 }
 
 let score = 0;
 let jogoAtivo = false;
 
 function irParaMenuJogos() {
-    const menu = document.getElementById("menuInicial");
+    // 1. Esconder todas as secções
+    const seccoes = [
+        "menuInicial", "pagina1", "pagina2", "pagina3", "paginaPergunta",
+        "paginaSim", "paginaCarta", "paginaTutorial", "paginaVideoJogo",
+        "paginaVideoJogo2", "paginaLoveClicker", "paginaMenuJogos",
+        "paginaPremio1", "paginaPremio2", "paginaPremio3"
+    ];
+    seccoes.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+    });
+
+    const containerPesca = document.querySelector(".container-pesca");
+    if (containerPesca) containerPesca.style.display = "none";
+
+    // 2. Mostrar o Menu de Jogos com Fade In
     const paginaJogos = document.getElementById("paginaMenuJogos");
-
-    // Esconde o menu inicial
-    if (menu) menu.style.display = "none";
-
-    // Mostra a página dos botões de jogos
     if (paginaJogos) {
         paginaJogos.style.display = "flex";
-        // Garante que o scroll volta ao topo
+
+        // --- NOVO: Aplicar Efeito de Fade In ---
+        paginaJogos.classList.remove("animar-pagina-fade"); // Remove se já existia
+        void paginaJogos.offsetWidth;                // Truque para resetar animação
+        paginaJogos.classList.add("animar-pagina-fade");    // Adiciona a animação
+
         window.scrollTo(0, 0);
+
+        const ganhos = premiosGanhos.length;
+        const contagemEl = document.getElementById("contagem");
+        if (contagemEl) contagemEl.innerText = ganhos;
+
+        // Determinar qual frase o Ponto vai dizer
+        let textoParaEscrever = "";
+        if (ganhos === 0) textoParaEscrever = "Escolhe um presente para recuperar-mos primeiro! ✨";
+        else if (ganhos === 1) textoParaEscrever = "Boa! Já temos um. Qual vai ser o próximo? 🤔";
+        else if (ganhos === 2) textoParaEscrever = "Só falta um! Quase lá Crominha! 💪";
+        else if (ganhos === 3) textoParaEscrever = "CONSEGUISTE TUDO! ❤️ Clica no botão ali em baixo!";
+
+        // --- EFEITO DE ESCREVER (Mantido com pequeno delay para o fade in) ---
+        const textoPonto = document.getElementById("texto-ponto-menu");
+        if (window.intervaloMenuJogos) clearInterval(window.intervaloMenuJogos);
+
+        textoPonto.textContent = "";
+        let i = 0;
+
+        // Esperamos 500ms do fade-in antes de começar a escrever o texto
+        setTimeout(() => {
+            window.intervaloMenuJogos = setInterval(() => {
+                if (i < textoParaEscrever.length) {
+                    textoPonto.textContent += textoParaEscrever[i];
+                    if (textoParaEscrever[i] !== " " && i % 3 === 0) {
+                        const somCurto = somPonto.cloneNode(true);
+                        somCurto.volume = 0.1;
+                        somCurto.play().catch(e => {});
+                    }
+                    i++;
+                } else {
+                    clearInterval(window.intervaloMenuJogos);
+                }
+            }, 50);
+        }, 500);
+
+        // Atualizar visual dos botões
+        for (let i = 1; i <= 3; i++) {
+            const btn = document.getElementById(`btn-jogo${i}`);
+            if (btn && premiosGanhos.includes(i)) {
+                btn.classList.add("botao-ganho");
+                btn.onclick = null;
+            }
+        }
+
+        // Lógica do botão final (Mantida conforme o teu código)
+        const btnFinal = document.getElementById("btn-final");
+        if (ganhos === 3 && btnFinal) {
+            btnFinal.disabled = false;
+            btnFinal.classList.add("desbloqueado");
+            btnFinal.innerText = "VER SURPRESA FINAL! ✨";
+            btnFinal.onclick = () => {
+                document.getElementById("paginaMenuJogos").style.display = "none";
+                const pagTrans = document.getElementById("paginaTransicaoPedido");
+                pagTrans.style.display = "flex";
+                pagTrans.classList.add("animar-pagina-fade");
+                const balao = document.getElementById("balao-transicao-final");
+                setTimeout(() => {
+                    balao.classList.add("mostrar-balao");
+                    iniciarFalaTransicao();
+                }, 1000);
+            };
+        }
     }
 }
 
-function irParaJogo(numero) {
-    document.getElementById("paginaMenuJogos").style.display = "none";
+function iniciarFalaTransicao() {
+    const textoEl = document.getElementById("texto-transicao-ponto");
+    const balao = document.getElementById("balao-transicao-final");
 
+    // A frase que ele vai dizer
+    const mensagem = "Ia-me esquecendo de dizer, o meu dono tinha uma pergunta para te fazer neste dia tão especial...";
+
+    // Garante que o balão aparece
+    balao.classList.add("mostrar-balao");
+    textoEl.textContent = "";
+
+    let i = 0;
+    // Limpa qualquer intervalo anterior para não duplicar letras
+    if (window.intervaloTransicao) clearInterval(window.intervaloTransicao);
+
+    window.intervaloTransicao = setInterval(() => {
+        if (i < mensagem.length) {
+            textoEl.textContent += mensagem[i];
+
+            // Som do ponto a cada 3 letras
+            if (mensagem[i] !== " " && i % 3 === 0) {
+                if (typeof somPonto !== 'undefined') {
+                    const somCurto = somPonto.cloneNode(true);
+                    somCurto.volume = 0.1;
+                    somCurto.play().catch(e => {});
+                }
+            }
+            i++;
+        } else {
+            // QUANDO TERMINA DE ESCREVER:
+            clearInterval(window.intervaloTransicao);
+
+            // Adiciona uma pequena indicação visual para a Lígia saber que pode clicar
+            const instrucao = document.createElement("p");
+            instrucao.style.fontSize = "10px";
+            instrucao.style.marginTop = "10px";
+            instrucao.style.opacity = "0.6";
+            instrucao.style.fontFamily = "Arial, sans-serif";
+            textoEl.appendChild(instrucao);
+
+            window.addEventListener('click', function avancarParaPergunta() {
+                // Remove o evento para não disparar várias vezes
+                window.removeEventListener('click', avancarParaPergunta);
+
+                // Transição final para a pergunta
+                executarTransicaoPixel(() => {
+                    document.getElementById("paginaTransicaoPedido").style.display = "none";
+                    document.getElementById("paginaPergunta").style.display = "flex";
+                    window.scrollTo(0, 0);
+                });
+            }, { once: true });
+        }
+    }, 50); // Velocidade da escrita
+}
+
+let jogoAtualSelecionado = 0;
+
+function irParaJogo(numero) {
+    if (premiosGanhos.includes(numero)) return;
+
+    if (intervaloMenuJogos) clearInterval(intervaloMenuJogos);
+
+    document.getElementById("paginaMenuJogos").style.display = "none";
+    const tutorial = document.getElementById("paginaTutorial");
+    tutorial.style.display = "flex";
+
+    const titulo = document.getElementById("titulo-tutorial");
+    const textoTutorial = document.getElementById("texto-tutorial");
+    const instrucoes = document.getElementById("instrucoes-detalhadas");
+    const btnComecar = document.getElementById("btn-comecar-jogo");
+
+    // Configura o conteúdo com base no jogo
     if (numero === 1) {
-        document.getElementById("paginaVideoJogo").style.display = "flex";
-        iniciarMinijogo(); // Teu jogo dos corações
-    } else if (numero === 2) {
-        iniciarJogoPesca(); // Teu jogo da pesca
-    } else if (numero === 3) {
-        document.getElementById('paginaLoveClicker').style.display = "flex";
+        textoTutorial.innerText = "Oh não! Precisamos de reunir algumas coisas para conseguir o teu presente";
+        titulo.innerText = "Apanha os Corações";
+        instrucoes.innerText = "Usa o rato para mover o balde 🪣 e apanhar 20 coisas boas que caem do céu. Não deixes escapar o nosso amor!";
+
+        // CORRECÇÃO AQUI:
+        btnComecar.onclick = () => {
+            executarTransicaoPixel(() => {
+                document.getElementById("paginaTutorial").style.display = "none";
+                document.getElementById("paginaVideoJogo").style.display = "block";
+                score = 0;
+                document.getElementById('score').innerHTML = `Corações: 0`;
+                iniciarMinijogo();
+            });
+        };
+    }
+    else if (numero === 2) {
+        textoTutorial.innerText = "Nem acredito! O Carlitos mandou um dos teus presentes para o fundo do mar, temos que ir buscá-lo, ajuda-me...";
+        titulo.innerText = "Pesca de Tesouros";
+        instrucoes.innerText = "Clica e segura para descer o anzol. Desvia-te dos peixes 🐟 e apanha o presente que está na areia!";
+
+        btnComecar.onclick = () => {
+            executarTransicaoPixel(() => {
+                document.getElementById("paginaTutorial").style.display = "none";
+                iniciarJogoPesca();
+            });
+        };
+    }
+    else if (numero === 3) {
+        textoTutorial.innerText = "Para receberes este presente, precisas de dar muitos miminhos à Lulu! ❤️";
+        titulo.innerText = "Love Clicker";
+        instrucoes.innerText = "Clica o mais rápido que conseguires! Precisas de pelo menos 70 cliques em 10 segundos para vencer.";
+
+        // Garante que o coração está pronto para receber cliques
         configurarCliquesCoracao();
+
+        // Dentro do if (numero === 3) no irParaJogo:
+        btnComecar.onclick = () => {
+            executarTransicaoPixel(() => {
+                document.getElementById("paginaTutorial").style.display = "none";
+                document.getElementById("paginaLoveClicker").style.display = "flex";
+
+                // Reset dos botões
+                document.getElementById('start-clicker-btn').style.display = 'block';
+                document.getElementById('start-clicker-btn').style.visibility = 'visible';
+                document.getElementById('btn-voltar-vitoria').style.display = 'none';
+
+                document.getElementById('message-clicker').innerText = "";
+                document.getElementById('score-clicker').innerText = "0";
+                document.getElementById('timer').innerText = "10";
+            });
+        };
     }
 }
 
 function ganharJogo(numero) {
-    // Esta função deve ser chamada quando o score atingir o limite ou o tempo acabar
+    if (premiosGanhos.includes(numero)) {
+        irParaMenuJogos();
+        return;
+    }
 
-    let presenteOriginal = "";
-    if(numero === 1) presenteOriginal = "um Jantar Romântico! 🍝";
-    if(numero === 2) presenteOriginal = "aquela Camisola que querias! 👕";
-    if(numero === 3) presenteOriginal = "uma Viagem surpresa! ✈️";
+    premiosGanhos.push(numero);
 
-    // Efeito de vitória
-    alert("PARABÉNS! ✨\nDesbloqueaste o Presente #" + numero + ":\n" + presenteOriginal);
+    // Esconde todas as páginas de jogo primeiro
+    const paginasJogo = ["paginaVideoJogo", "paginaVideoJogo2", "paginaLoveClicker"];
+    paginasJogo.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+    });
 
-    // Volta ao menu para ela escolher o próximo
-    irParaMenuJogos();
+    // Encaminha para a página específica do prémio
+    if (numero === 1) {
+        const pag1 = document.getElementById("paginaPremio1");
+        pag1.style.display = "flex";
+        iniciarFalaPremio1();
+    }
+    else if (numero === 2) {
+        const pag2 = document.getElementById("paginaPremio2");
+        pag2.style.display = "flex"; // Importante ser flex para alinhar tudo
+        iniciarFalaPremio2();
+    }
+    else if (numero === 3) {
+        const pag3 = document.getElementById("paginaPremio3");
+        pag3.style.display = "flex";
+        iniciarFalaPremio3(); // Ativa a fala da foto
+    }
 }
 
 function iniciarMinijogo() {
@@ -522,19 +978,32 @@ function iniciarMinijogo() {
             return;
         }
         criarCoracao(player, scoreElement);
-    }, 600); // Cria um coração a cada 0.6 segundos
+    }, 400); // Cria um coração a cada 0.6 segundos
 }
 
 function criarCoracao(player, scoreElement) {
+    const itensBons = ['❤️', '💖', '✨', '🌸', '💎', '⭐'];
+    const chanceDeCoco = Math.random() < 0.15;
+
+    const itemSorteado = chanceDeCoco ? '💩' : itensBons[Math.floor(Math.random() * itensBons.length)];
+
     const coracao = document.createElement('div');
-    coracao.innerHTML = '❤️';
+    coracao.innerHTML = itemSorteado;
     coracao.className = 'coracao-caindo';
     coracao.style.position = 'fixed';
-    coracao.style.left = Math.random() * (window.innerWidth - 40) + 'px';
+    coracao.style.left = Math.random() * (window.innerWidth - 60) + 'px';
+
+    // --- ALTERAÇÃO: TAMANHO MAIOR ---
+    coracao.style.fontSize = '50px'; // Aumentei de 30px para 50px
+    coracao.style.userSelect = 'none'; // Evita que ela selecione o emoji sem querer
+
     document.body.appendChild(coracao);
 
-    let posicaoTopo = -50;
-    const velocidade = 3 + Math.random() * 4; // Velocidades diferentes para parecer mais natural
+    let posicaoTopo = -60;
+
+    // --- ALTERAÇÃO: VELOCIDADE MAIS RÁPIDA ---
+    // Aumentei a base de 3 para 6, e a variação de 4 para 6.
+    const velocidade = 6 + Math.random() * 6;
 
     const queda = setInterval(() => {
         if (!jogoAtivo) {
@@ -546,22 +1015,34 @@ function criarCoracao(player, scoreElement) {
         posicaoTopo += velocidade;
         coracao.style.top = posicaoTopo + 'px';
 
-        const baldeRect = document.getElementById('imagemBalde').getBoundingClientRect(); // Focamos no balde
+        const baldeRect = document.getElementById('imagemBalde').getBoundingClientRect();
         const cRect = coracao.getBoundingClientRect();
 
-        const margemErro = 15;
+        // Ajuste fino da colisão para o novo tamanho (mais generoso)
         if (
             cRect.bottom >= baldeRect.top &&
-            cRect.right >= baldeRect.left + 30 &&
-            cRect.left <= baldeRect.right + 10 &&
-            cRect.top <= baldeRect.bottom - 10
+            cRect.right >= baldeRect.left + 10 &&
+            cRect.left <= baldeRect.right - 10 &&
+            cRect.top <= baldeRect.bottom
         ) {
-            score++;
-            scoreElement.innerHTML = `Corações: ${score}`;
+            if (itemSorteado === '💩') {
+                score = Math.max(0, score - 5);
+                scoreElement.innerHTML = `Corações: ${score} (CUIDADO! 💩)`;
+                scoreElement.style.color = "#8B4513"; // Castanho
+                setTimeout(() => { scoreElement.style.color = "white"; }, 500);
+            } else {
+                score++;
+                scoreElement.innerHTML = `Corações: ${score}`;
+
+                // Feedback visual rápido ao apanhar (opcional)
+                scoreElement.style.transform = "scale(1.2)";
+                setTimeout(() => { scoreElement.style.transform = "scale(1)"; }, 100);
+            }
+
             coracao.remove();
             clearInterval(queda);
 
-            if (score === 20) {
+            if (score >= 20) {
                 jogoAtivo = false;
                 finalizarJogo();
             }
@@ -570,25 +1051,40 @@ function criarCoracao(player, scoreElement) {
         if (posicaoTopo > window.innerHeight) {
             coracao.remove();
             clearInterval(queda);
-            if (jogoAtivo) { // Só tira pontos se o jogo ainda estiver a decorrer
-                score = score - 2;
-                scoreElement.innerHTML = `Corações: ${score}`; // ATUALIZAÇÃO IMEDIATA AQUI!
+
+            if (jogoAtivo && itemSorteado !== '💩') {
+                score = Math.max(0, score - 1);
+                scoreElement.innerHTML = `Corações: ${score}`;
             }
         }
     }, 20);
 }
 
 function finalizarJogo() {
-    // 1. Limpa cliques de conversas anteriores que ficaram ativos
-    window.removeEventListener("click", avancarMensagem);
-    window.removeEventListener("click", avancarMensagemLigia);
+    jogoAtivo = false;
 
-    // 2. Esconde o jogo 1 e limpa corações
-    document.getElementById("paginaVideoJogo").style.display = "none";
-    document.querySelectorAll('.coracao-caindo').forEach(c => c.remove());
+    // 1. Chamar a transição de pixéis
+    executarTransicaoPixel(() => {
+        // --- TUDO O QUE ACONTECE AQUI DENTRO É FEITO ENQUANTO O ECRÃ ESTÁ COBERTO ---
 
-    // 3. Inicia a pesca
-    iniciarJogoPesca();
+        // 2. Esconde o jogo
+        const paginaVideo = document.getElementById("paginaVideoJogo");
+        if (paginaVideo) paginaVideo.style.display = "none";
+
+        // 3. Limpa os corações restantes
+        document.querySelectorAll('.coracao-caindo').forEach(c => c.remove());
+
+        // 4. Mostra a página de prémio
+        const paginaPremio = document.getElementById("paginaPremio1");
+        if (paginaPremio) {
+            paginaPremio.style.display = "flex";
+            // Removemos o fade in para não haver conflito de animações
+            paginaPremio.style.opacity = "1";
+        }
+
+        // 5. Executa a lógica de vitória (sons, falas do Ponto, etc.)
+        ganharJogo(1);
+    });
 }
 
 let peixes = []; // Array global para controlar os peixes
@@ -665,6 +1161,12 @@ function lancarAnzol() {
     linha.style.height = "65vh";
 
     const loopColisao = setInterval(() => {
+
+        if (presenteCapturado) {
+            clearInterval(loopColisao);
+            return;
+        }
+
         const anzolRect = anzol.getBoundingClientRect();
 
         // 1. Colisão com Peixes (Reset normal)
@@ -681,22 +1183,24 @@ function lancarAnzol() {
 
             tesouro.style.transition = "none";
 
-            // Loop para o presente subir "colado" ao anzol
+            // Criamos uma variável local para garantir que a vitória só dispara 1 vez
+            let vitoriaDisparada = false;
+
             const subirComTesouro = setInterval(() => {
                 const novoAnzolRect = anzol.getBoundingClientRect();
                 const linhaAltura = parseFloat(window.getComputedStyle(linha).height);
 
-                // Faz o presente seguir o anzol
                 tesouro.style.top = (novoAnzolRect.top) + "px";
                 tesouro.style.left = (novoAnzolRect.left) + "px";
 
-                // Quando a linha chega quase ao topo (5px)
                 if (linhaAltura <= 5) {
                     clearInterval(subirComTesouro);
-                    tesouro.style.display = "none"; // Remove o tesouro do mar
 
-                    // IMPORTANTE: Adicionados os parênteses para executar a função!
-                    ganharJogoPesca();
+                    if (!vitoriaDisparada) {
+                        vitoriaDisparada = true;
+                        tesouro.style.display = "none";
+                        ganharJogoPesca(); // AGORA SÓ CHAMA UMA VEZ
+                    }
                 }
             }, 10);
 
@@ -709,7 +1213,7 @@ function lancarAnzol() {
         if (pescando && !presenteCapturado) {
             resetarCana(loopColisao);
         }
-    }, 1200); // Um pouco mais que o tempo da transição CSS
+    }, 1000); // Um pouco mais que o tempo da transição CSS
 }
 
 function resetarCana(intervalo) {
@@ -745,40 +1249,34 @@ function animarPresente() {
     mover();
 }
 
-function pularParaPesca() {
-    // Esconde o menu e qualquer outra página aberta
-    document.getElementById("menuInicial").style.display = "none";
-    document.getElementById("pagina1").style.display = "none";
-    document.getElementById("pagina2").style.display = "none";
-    document.getElementById("pagina3").style.display = "none";
-    document.getElementById("paginaPergunta").style.display = "none";
-    document.getElementById("paginaSim").style.display = "none";
-    document.getElementById("paginaCarta").style.display = "none";
-    document.getElementById("paginaVideoJogo").style.display = "none";
-
-    iniciarJogoPesca();
-}
-
 function ganharJogoPesca() {
-    const containerPesca = document.querySelector('.container-pesca');
-    containerPesca.style.transition = "opacity 1s";
-    containerPesca.style.opacity = "0";
+    pescando = false;
 
-    setTimeout(() => {
-        containerPesca.style.display = "none";
+    // 1. Inicia a transição de pixéis
+    executarTransicaoPixel(() => {
+        // --- TUDO AQUI DENTRO ACONTECE DURANTE O "BLACKOUT" DOS PIXÉIS ---
 
-        const clicker = document.getElementById('paginaLoveClicker');
-        clicker.style.display = "flex";
-        clicker.style.opacity = "0";
+        // 2. Esconde os containers do jogo 2
+        const p2 = document.getElementById("paginaVideoJogo2");
+        if (p2) p2.style.display = "none";
 
-        // --- ATIVA OS CLIQUES AQUI ---
-        configurarCliquesCoracao();
+        const containerPesca = document.querySelector('.container-pesca');
+        if (containerPesca) containerPesca.style.display = "none";
 
-        setTimeout(() => {
-            clicker.style.transition = "opacity 1s";
-            clicker.style.opacity = "1";
-        }, 50);
-    }, 1000);
+        // 3. Limpeza de peixes e arrays
+        document.querySelectorAll('.peixe-obstaculo').forEach(p => p.remove());
+        peixes = [];
+
+        // 4. Mostra a página do Prémio #2
+        const paginaPremio2 = document.getElementById("paginaPremio2");
+        if (paginaPremio2) {
+            paginaPremio2.style.display = "flex";
+            paginaPremio2.style.opacity = "1"; // Garante que não há fade-in conflituoso
+        }
+
+        // 5. CHAMA A LÓGICA DE VITÓRIA (entrega do presente/fala do Ponto)
+        ganharJogo(2);
+    });
 }
 
 // --- 1. VARIÁVEIS DE CONTROLO ---
@@ -828,38 +1326,264 @@ function iniciarContagemClicker() {
 
     document.getElementById('score-clicker').innerText = "0";
     document.getElementById('timer').innerText = "10";
-    document.getElementById('message-clicker').innerText = "DÁ-LHE!";
-    document.getElementById('start-clicker-btn').style.visibility = 'hidden';
+    document.getElementById('message-clicker').innerText = "RÁPIDO! CLICA!!!";
+
+    const btn = document.getElementById('start-clicker-btn');
+    if (btn) btn.style.visibility = 'hidden';
 
     clearInterval(clickTimerId);
     clickTimerId = setInterval(() => {
         clickTimeLeft--;
-        document.getElementById('timer').innerText = clickTimeLeft;
+        const timerEl = document.getElementById('timer');
+        if (timerEl) timerEl.innerText = clickTimeLeft;
         if (clickTimeLeft <= 0) endClickGame();
     }, 1000);
 }
 
-// Atualiza a função de fim de jogo para mostrar o botão novamente
 function endClickGame() {
     clearInterval(clickTimerId);
     clickGameActive = false;
 
-    const clickStartBtn = document.getElementById('start-clicker-btn');
-    const clickMessageEl = document.getElementById('message-clicker');
+    const btnStart = document.getElementById('start-clicker-btn');
+    const btnVoltar = document.getElementById('btn-voltar-vitoria');
+    const msg = document.getElementById('message-clicker');
 
-    if(clickStartBtn) {
-        clickStartBtn.style.visibility = 'visible';
-        clickStartBtn.innerText = "Tentar de novo?";
-    }
+    if (clickScore >= 70) {
+        msg.innerText = "CONSEGUISTE! A LULU ESTÁ SUPER FELIZ! ❤️";
+        if (btnStart) btnStart.style.display = 'none';
 
-    if (clickMessageEl) {
-        if (clickScore > 50) {
-            clickMessageEl.innerText = `INCRÍVEL! ${clickScore} cliques! ❤️`;
-        } else {
-            clickMessageEl.innerText = `Fim! Fizeste ${clickScore} cliques!`;
+        if (btnVoltar) {
+            btnVoltar.style.display = 'block';
+            btnVoltar.innerText = "Recolher Presente 🎁";
+
+            // Definir o clique para a transição
+            btnVoltar.onclick = () => {
+                executarTransicaoPixel(() => {
+                    // 1. Esconde o jogo 3
+                    const jogo3 = document.getElementById("paginaLoveClicker");
+                    if (jogo3) jogo3.style.display = "none";
+
+                    // 2. Configura a Página de Prémio 3 para o Fade In
+                    const paginaPremio3 = document.getElementById("paginaPremio3");
+                    if (paginaPremio3) {
+                        paginaPremio3.style.display = "flex";
+
+                        // Reset e disparo da classe de fade
+                        paginaPremio3.classList.remove("animar-pagina-fade");
+                        void paginaPremio3.offsetWidth; // Força o browser a resetar a animação
+                        paginaPremio3.classList.add("animar-pagina-fade");
+                    }
+
+                    // 3. Chama a lógica de vitória (falas da Lulu)
+                    ganharJogo(3);
+                });
+            };
+        }
+    } else {
+        msg.innerText = "Faltaram cliques! Tenta de novo.";
+        if (btnStart) {
+            btnStart.style.visibility = 'visible';
+            btnStart.style.display = 'block';
+            btnStart.innerText = "Tentar Novamente";
         }
     }
 }
+
+function irParaDespedida() {
+    // Esconde o menu de jogos
+    document.getElementById("paginaMenuJogos").style.display = "none";
+
+    const pDespedida = document.getElementById("paginaDespedida");
+    pDespedida.style.display = "flex"; // Usa flex para respeitar o alinhamento do CSS
+
+    if (typeof dispararConfetis === "function") {
+        dispararConfetis();
+    }
+}
+
+function iniciarFalaPremio1() {
+    const textoElemento = document.getElementById("texto-premio1");
+    const balao = document.getElementById("balao-premio1");
+    const ponto = document.getElementById("ponto-premio1");
+    const balde = document.getElementById("balde-vitoria");
+    const mensagem = "Incrível! Apanhaste tudo o que era preciso para este presente! ❤️";
+
+    textoElemento.textContent = "";
+    let i = 0;
+
+    if (window.intervaloPremio) clearInterval(window.intervaloPremio);
+
+    window.intervaloPremio = setInterval(() => {
+        if (i < mensagem.length) {
+            textoElemento.textContent += mensagem[i];
+            if (mensagem[i] !== " " && i % 3 === 0) {
+                const somCurto = somPonto.cloneNode(true);
+                somCurto.volume = 0.1;
+                somCurto.play().catch(e => {});
+            }
+            i++;
+        // ... (resto do código igual até ao else)
+        } else {
+            clearInterval(window.intervaloPremio);
+
+            window.addEventListener('click', function dispararAnimacoes() {
+                window.removeEventListener('click', dispararAnimacoes);
+
+                balao.classList.remove("mostrar-balao");
+                balao.style.display = "none";
+                ponto.classList.add("ponto-subir-vitoria");
+
+                setTimeout(() => {
+                    // 3. O Balde entra em cena
+                    balde.style.display = "block"; // Garante que o display não é none
+                    balde.classList.add("balde-entrar-vitoria");
+
+                    // --- NOVO: Animação do Presente ---
+                    setTimeout(() => {
+                        const presente = document.getElementById("presente-vitoria");
+                        presente.classList.add("animar-presente");
+
+                        // 4. Só depois do presente saltar é que o próximo clique volta ao menu
+                        setTimeout(() => {
+                            window.addEventListener('click', () => {
+                                irParaMenuJogos();
+                            }, { once: true });
+                        }, 1200);
+                    }, 1000); // Espera o balde terminar de subir para o presente saltar
+
+                }, 800);
+            }, { once: true });
+        }
+    }, 50);
+}
+
+function iniciarFalaPremio2() {
+    const textoElemento = document.getElementById("texto-premio2");
+    const mensagem = "Olha só o que conseguiste resgatar das profundezas! É lindo! ✨";
+
+    textoElemento.textContent = "";
+    let i = 0;
+
+    if (window.intervaloPremio) clearInterval(window.intervaloPremio);
+
+    window.intervaloPremio = setInterval(() => {
+        if (i < mensagem.length) {
+            textoElemento.textContent += mensagem[i];
+
+            if (mensagem[i] !== " " && i % 3 === 0) {
+                const somCurto = somPonto.cloneNode(true);
+                somCurto.volume = 0.1;
+                somCurto.play().catch(e => {});
+            }
+            i++;
+        } else {
+            clearInterval(window.intervaloPremio);
+
+            // Clique para voltar ao menu
+            window.addEventListener('click', function voltarAoMenu() {
+                irParaMenuJogos();
+                window.removeEventListener('click', voltarAoMenu);
+            }, { once: true });
+        }
+    }, 50);
+}
+
+function iniciarFalaPremio3() {
+    const textoElemento = document.getElementById("texto-premio3");
+    const containerLulu = document.getElementById("lulu-voa-container");
+    const presente = document.getElementById("presente-final-3");
+
+    const msg1 = "Obrigada pelas festinhas! Estava mesmo a precisar de carinho... ❤️";
+    const msg2 = "O Carlitos pediu-me para esconder isto, mas já que me trataste tão bem, eu vou-to dar!";
+
+    let i = 0;
+    let mensagemAtual = msg1;
+
+    function escreverTexto(texto, callback) {
+        textoElemento.textContent = "";
+        i = 0;
+        if (window.intervaloPremio) clearInterval(window.intervaloPremio);
+
+        window.intervaloPremio = setInterval(() => {
+            if (i < texto.length) {
+                textoElemento.textContent += texto[i];
+                if (texto[i] !== " " && i % 3 === 0) {
+                    const somCurto = somPonto.cloneNode(true);
+                    somCurto.volume = 0.1;
+                    somCurto.play().catch(e => {});
+                }
+                i++;
+            } else {
+                clearInterval(window.intervaloPremio);
+                if (callback) callback();
+            }
+        }, 50);
+    }
+
+    // Inicia a primeira fala
+    escreverTexto(msg1, () => {
+        // Espera clique para a segunda fala
+        window.addEventListener('click', function proximaFala() {
+            window.removeEventListener('click', proximaFala);
+
+            // Inicia a segunda fala
+            escreverTexto(msg2, () => {
+                // Espera clique para a animação final
+                window.addEventListener('click', function dispararEntrega() {
+                    window.removeEventListener('click', dispararEntrega);
+
+                    containerLulu.classList.add("lulu-subir-vitoria");
+
+                    setTimeout(() => {
+                        presente.classList.add("presente-entrar-vitoria");
+
+                        setTimeout(() => {
+                            window.addEventListener('click', () => {
+                                irParaMenuJogos();
+                            }, { once: true });
+                        }, 1000);
+                    }, 800);
+                }, { once: true });
+            });
+        }, { once: true });
+    });
+}
+
+function executarTransicaoPixel(acaoNoMeio) {
+    const transitionContainer = document.getElementById("pixel-transition");
+    transitionContainer.innerHTML = ''; // Limpa blocos antigos
+
+    const colunas = 10;
+    const linhas = Math.ceil(window.innerHeight / (window.innerWidth / colunas));
+    const totalBlocks = colunas * linhas;
+
+    // Criar os blocos
+    for (let i = 0; i < totalBlocks; i++) {
+        const block = document.createElement("div");
+        block.className = "pixel-block";
+        block.style.width = `10vw`;
+        block.style.height = `10vw`;
+        transitionContainer.appendChild(block);
+    }
+
+    const blocks = document.querySelectorAll(".pixel-block");
+
+    // 1. Pixels aparecem (Escurece tudo)
+    blocks.forEach((block) => {
+        setTimeout(() => { block.style.opacity = "1"; }, Math.random() * 600);
+    });
+
+    // 2. No meio da animação (quando está tudo preto)
+    setTimeout(() => {
+        acaoNoMeio(); // EXECUTAR A MUDANÇA DE PÁGINA AQUI
+
+        // 3. Pixels desaparecem (Revela o jogo)
+        blocks.forEach((block) => {
+            setTimeout(() => { block.style.opacity = "0"; }, Math.random() * 600);
+        });
+    }, 800); // Espera 800ms para garantir que está tudo tapado
+}
+
 
 // Bloqueio Global do Menu de Contexto (Botão Direito) em toda a página
 document.addEventListener('contextmenu', event => event.preventDefault());
