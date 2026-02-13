@@ -103,9 +103,9 @@ const mensagens = [
      "Heeeeey, nem reparei que estás aí!",
      "Sabes, é que eu tenho andado com a cabeça cheia...",
      "Esta missão que o meu dono deu não me sai da cabeça",
-     "Aiiii, mas que falta de educação a minha.",
-     "Ainda nem me apresentei.",
-     "Eu sou o BIP, o animal espiritual do meu dono Martim Andrade de Sá",
+     "Aiiii, mas que falta de educação a minha",
+     "Ainda nem me apresentei",
+     "Eu sou o BIP, o animal espiritual do meu dono: Martim Andrade de Sá",
      "E tu, como te chamas?"
 ];
 
@@ -405,7 +405,7 @@ const comentariosFotos = [
     "Experimentaram bebidas do Starbucks juntos",
     "E deste dia, lembraste?!",
     "Já fizeram vasos de flores e versões de vocês em plasticina",
-    "Fizeram abóboras personalizadaas",
+    "Fizeram abóboras personalizadas",
     "Passaram muito tempo na praia durante o verão",
     "Esta foto foi num dia super especial...",
     "Foram disfarçados a combinar no Halloween",
@@ -874,7 +874,7 @@ function irParaJogo(numero) {
     if (numero === 1) {
         textoTutorial.innerText = "Oh não! Precisamos de reunir algumas coisas para conseguir o teu presente";
         titulo.innerText = "Apanha os Corações";
-        instrucoes.innerText = "Usa o rato para mover o balde 🪣 e apanhar 20 coisas boas que caem do céu. Não deixes escapar o nosso amor!";
+        instrucoes.innerText = "Usa o rato para mover o balde 🪣 e apanhar 30 coisas boas que caem do céu. Não deixes escapar o nosso amor!";
 
         // CORRECÇÃO AQUI:
         btnComecar.onclick = () => {
@@ -1003,7 +1003,7 @@ function criarCoracao(player, scoreElement) {
 
     // --- ALTERAÇÃO: VELOCIDADE MAIS RÁPIDA ---
     // Aumentei a base de 3 para 6, e a variação de 4 para 6.
-    const velocidade = 6 + Math.random() * 6;
+    const velocidade = 5 + Math.random() * 6;
 
     const queda = setInterval(() => {
         if (!jogoAtivo) {
@@ -1042,7 +1042,7 @@ function criarCoracao(player, scoreElement) {
             coracao.remove();
             clearInterval(queda);
 
-            if (score >= 20) {
+            if (score >= 30) {
                 jogoAtivo = false;
                 finalizarJogo();
             }
@@ -1053,7 +1053,7 @@ function criarCoracao(player, scoreElement) {
             clearInterval(queda);
 
             if (jogoAtivo && itemSorteado !== '💩') {
-                score = Math.max(0, score - 1);
+                score = Math.max(0, score - 2);
                 scoreElement.innerHTML = `Corações: ${score}`;
             }
         }

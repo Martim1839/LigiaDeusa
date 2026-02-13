@@ -243,6 +243,13 @@ canvas {
     animation: none;
 }
 
+/* Este seletor garante que só afeta o balão quando ele está dentro da pagina1 */
+#pagina2 .balao-texto {
+    margin-bottom: 10px; /* Aumenta este valor para subir o balão */
+    position: relative;
+    z-index: 10;
+}
+
 .carregando {
     color: white;
     font-family: 'fonteVIDEOJOGO', sans-serif;
@@ -1461,7 +1468,7 @@ button {
 }
 
 @keyframes voarParaCimaSaida {
-    0% { transform: translateY(0); opacity: 1; }
+    0% { transform: translateY(75px); opacity: 1; }
     100% { transform: translateY(-600px); opacity: 0; }
 }
 
