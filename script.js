@@ -100,9 +100,9 @@ function newBlocksAnimation(container, colunas, total, callbackMid) {
 }
 
 const mensagens = [
-     "Heeeeey, nem reparei que estás aí!",
+     "Heeeeey, nem reparei que estavas aí!",
      "Sabes, é que eu tenho andado com a cabeça cheia...",
-     "Esta missão que o meu dono deu não me sai da cabeça",
+     "Esta missão que o meu dono deu-me não me sai da cabeça",
      "Aiiii, mas que falta de educação a minha",
      "Ainda nem me apresentei",
      "Eu sou o BIP, o animal espiritual do meu dono: Martim Andrade de Sá",
