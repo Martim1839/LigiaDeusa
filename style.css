@@ -243,6 +243,25 @@ canvas {
     animation: none;
 }
 
+/* Garante que o container do NPC não estique para ocupar o ecrã todo */
+#pagina2 .npc-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto;    /* Crucial: impede que o container cresça sozinho */
+    gap: -200px;       /* Distância fixa e pequena entre o balão e o ponto */
+    margin: auto;    /* Centraliza o bloco inteiro na página */
+}
+
+/* Ajuste específico para o balão na página 2 */
+#pagina2 .balao-texto {
+    margin-bottom: 0; /* Remove margens que possam estar a empurrar o ponto */
+    position: relative;
+    display: none;    /* Será controlado pelo seu JS */
+    max-width: 300px; /* Evita que o balão fique gigante em ecrãs largos */
+}
+
 /* Este seletor garante que só afeta o balão quando ele está dentro da pagina1 */
 #pagina2 .balao-texto {
     margin-bottom: 10px; /* Aumenta este valor para subir o balão */

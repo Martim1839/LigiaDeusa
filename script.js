@@ -902,7 +902,7 @@ function irParaJogo(numero) {
     else if (numero === 3) {
         textoTutorial.innerText = "Para receberes este presente, precisas de dar muitos miminhos à Lulu! ❤️";
         titulo.innerText = "Love Clicker";
-        instrucoes.innerText = "Clica o mais rápido que conseguires! Precisas de pelo menos 70 cliques em 10 segundos para vencer.";
+        instrucoes.innerText = "Clica o mais rápido que conseguires! Precisas de pelo menos 50 cliques em 10 segundos para vencer.";
 
         // Garante que o coração está pronto para receber cliques
         configurarCliquesCoracao();
@@ -1348,7 +1348,7 @@ function endClickGame() {
     const btnVoltar = document.getElementById('btn-voltar-vitoria');
     const msg = document.getElementById('message-clicker');
 
-    if (clickScore >= 70) {
+    if (clickScore >= 50) {
         msg.innerText = "CONSEGUISTE! A LULU ESTÁ SUPER FELIZ! ❤️";
         if (btnStart) btnStart.style.display = 'none';
 
